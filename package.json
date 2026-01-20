@@ -9,9 +9,9 @@
     "node": ">=21.7.0"
   },
   "scripts": {
-    "start": "node index.js",
-    "start:gc": "node --expose-gc index.js",
-    "dev": "node --expose-gc index.js",
+    "start": "node --env-file=.env index.js",
+    "start:gc": "node --env-file=.env --expose-gc index.js",
+    "dev": "node --env-file=.env.dev --expose-gc index.js",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
     "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",

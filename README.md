@@ -186,27 +186,53 @@ npm start
 
 ## 🔧 Configuració
 
-### ⚙️ Variables d'Entorn
+### ⚙️ Variables d'Entorn (OBLIGATORI per producció)
+
+**⚠️ IMPORTANT**: Per motius de seguretat, has de configurar les variables d'entorn abans d'executar en producció.
+
+#### Configuració Ràpida (Desenvolupament Local)
+```bash
+# 1. Copia la plantilla
+cp .env.example .env
+
+# 2. Genera secrets segurs
+openssl rand -base64 48  # Copia aquest valor per JWT_ACCESS_SECRET
+openssl rand -base64 48  # Copia aquest valor per JWT_REFRESH_SECRET
+
+# 3. Edita .env i enganxa els secrets generats
+
+# 4. Executa l'aplicació (Node.js >=20.6.0 carrega .env nativament)
+npm start
+```
+
+**Nota**: El projecte utilitza el suport natiu de Node.js per carregar `.env` (`--env-file=.env`). No cal instal·lar paquets addicionals com `dotenv`.
+
+#### Variables Disponibles
 ```bash
 # Servidor
 PORT=33333
 NODE_ENV=development
-
-# Base de dades
 DB_PATH=./database/app.db
 
-# JWT
-JWT_SECRET=your-super-secret-key
-JWT_ACCESS_EXPIRY=15m
-JWT_REFRESH_EXPIRY=7d
-
-# Fitxers
-MAX_FILE_SIZE=20MB
-ALLOWED_TYPES=image/jpeg,image/png
+# JWT Secrets (OBLIGATORI - genera'ls amb openssl)
+JWT_ACCESS_SECRET=your-super-secret-min-48-chars
+JWT_REFRESH_SECRET=your-super-secret-min-48-chars
 ```
 
+#### 📚 Guia Completa de Configuració
+Per a instruccions detallades sobre com generar i configurar secrets de manera segura per cada entorn (desenvolupament, staging, producció), consulta:
+
+**➡️ [Guia Completa de Configuració de Secrets](docs/SECRETS_SETUP.md)**
+
+Aquesta guia inclou:
+- ✅ Com generar secrets segurs
+- ✅ Configuració per diferents entorns  
+- ✅ Configuració en diferents plataformes (Heroku, Vercel, Railway, PM2, etc.)
+- ✅ Rotació de secrets i millors pràctiques
+- ✅ Què fer si s'exposa un secret
+
 ### 🎛️ Configuració Avançada
-Consulta `config/config.js` per opcions avançades:
+Consulta [config/config.js](config/config.js) per opcions avançades:
 - Configuració de base de dades
 - Límits de fitxers
 - Configuració JWT
