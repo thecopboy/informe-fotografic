@@ -243,6 +243,9 @@ Si vols que l'aplicació es desplegui automàticament quan es fa push a GitHub, 
 
 **➡️ [Guia de Configuració del Webhook](docs/WEBHOOK_GITHUB_SETUP.md)**
 
+- 🔑 La variable `GITHUB_WEBHOOK_SECRET` es configura només a `git-update/.env` (no al `.env` principal)
+- 📦 El servei del webhook s'executa des de la carpeta `git-update/`
+
 ## 🧪 Testing
 
 ### 🔍 Tests Implementats

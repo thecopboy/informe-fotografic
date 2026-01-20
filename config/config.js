@@ -5,6 +5,14 @@
  * @license Apache-2.0
  */
 
+const getRequiredEnv = (name) => {
+    const value = process.env[name];
+    if (!value) {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+    return value;
+};
+
 export const config = {
     // Configuració del servidor
     server: {
@@ -21,8 +29,8 @@ export const config = {
 
     // Configuració JWT
     jwt: {
-        accessTokenSecret: process.env.JWT_ACCESS_SECRET || 'your-access-secret-key',
-        refreshTokenSecret: process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
+        accessTokenSecret: getRequiredEnv('JWT_ACCESS_SECRET'),
+        refreshTokenSecret: getRequiredEnv('JWT_REFRESH_SECRET'),
         accessTokenExpiry: '15m',
         refreshTokenExpiry: '7d'
     },
