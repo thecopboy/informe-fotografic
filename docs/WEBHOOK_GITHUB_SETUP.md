@@ -18,66 +18,36 @@ openssl rand -base64 32
 
 **Copia el valor generat** (exemple: `qN8mPxZ7kL2wRtY5hJ9dFgV3sB1nM4cE`)
 
-### Pas 2: Configura el Secret al Servidor
+### Pas 2: Afegeix el Secret al Fitxer .env
 
-#### Opció A: Variable d'Entorn (Recomanat)
-
-```bash
-# Afegeix a .env del servidor:
-echo "GITHUB_WEBHOOK_SECRET=qN8mPxZ7kL2wRtY5hJ9dFgV3sB1nM4cE" >> /path/to/.env
-
-# Recarrega la variable
-source /path/to/.env
-export GITHUB_WEBHOOK_SECRET=$(cat /path/to/.env | grep GITHUB_WEBHOOK_SECRET | cut -d '=' -f 2)
-```
-
-#### Opció B: PM2 Ecosystem (Si utilitzes PM2)
-
-```javascript
-// ecosystem.config.js
-module.exports = {
-  apps: [
-    {
-      name: "github-update",
-      script: "./git-update/github.js",
-      env: {
-        NODE_ENV: "production",
-        GITHUB_WEBHOOK_SECRET: "qN8mPxZ7kL2wRtY5hJ9dFgV3sB1nM4cE"
-      }
-    }
-  ]
-};
-```
-
-#### Opció C: Variables d'Entorn del Sistema
+El webhook carrega la variable `GITHUB_WEBHOOK_SECRET` des del fitxer `git-update/.env`:
 
 ```bash
-# Afegeix al ~/.bashrc o ~/.zshrc:
-export GITHUB_WEBHOOK_SECRET="qN8mPxZ7kL2wRtY5hJ9dFgV3sB1nM4cE"
-
-# Recarrega el shell:
-source ~/.bashrc
+# Al servidor, afegeix la variable al fitxer .env
+cd /path/to/informe-fotografic/git-update
+echo "GITHUB_WEBHOOK_SECRET=qN8mPxZ7kL2wRtY5hJ9dFgV3sB1nM4cE" >> .env
 ```
 
-### Pas 3: Reinicia l'Aplicació de Webhook
+### Pas 3: Arrenca el Webhook amb PM2
+
+**Important**: Utilitza `--node-args="--env-file=.env"` perquè PM2 carregui el fitxer .env:
 
 ```bash
-# Si utilitzes PM2
+cd /path/to/informe-fotografic/git-update
+pm2 start github.js --name github-update --node-args="--env-file=.env"
+
+# Per reiniciar si ja està arrencant
 pm2 restart github-update
-
-# Si utilitzes npm directament
-cd /path/to/git-update
-npm start
 ```
 
 ### Pas 4: Verifica que Funciona
 
 ```bash
-# Comprova que la variable està definida
-echo $GITHUB_WEBHOOK_SECRET
-
 # Comprova que el webhook escolta correctament
 pm2 logs github-update | head -20
+
+# Verifica que carrega la variable del fitxer .env
+pm2 exec github-update -- node -e "console.log('Secret:', process.env.GITHUB_WEBHOOK_SECRET?.substring(0, 10) + '...')"
 ```
 
 ---
@@ -142,13 +112,14 @@ Clicka **"Add webhook"**
 
 **Solució:**
 ```bash
-# Verifica que la variable està definida
-echo $GITHUB_WEBHOOK_SECRET
+# Verifica que el secret està al fitxer .env
+cat /path/to/git-update/.env | grep GITHUB_WEBHOOK_SECRET
 
-# Si no surt res, defineix-la:
-export GITHUB_WEBHOOK_SECRET="el_teu_secret"
+# Si no hi és, afegeix-lo:
+cd /path/to/git-update
+echo "GITHUB_WEBHOOK_SECRET=el_teu_secret" >> .env
 
-# Reinicia el webhook
+# Reinicia el webhook perquè recarregui el fitxer .env
 pm2 restart github-update
 ```
 
@@ -169,18 +140,19 @@ pm2 logs github-update
 ### Error: "Invalid signature"
 
 **Significa que el secret no coincideix:**
-1. Verifica que el secret a GitHub és igual que `GITHUB_WEBHOOK_SECRET`
+1. Verifica que el secret a GitHub és igual que el de `git-update/.env`
 2. Si no coincideix, actualitza:
    ```bash
    # Genera un secret nou
    NEW_SECRET=$(openssl rand -base64 32)
    echo "Nou secret: $NEW_SECRET"
    
-   # Actualitza al servidor
-   export GITHUB_WEBHOOK_SECRET=$NEW_SECRET
+   # Actualitza al fitxer .env
+   cd /path/to/git-update
+   sed -i "s/GITHUB_WEBHOOK_SECRET=.*/GITHUB_WEBHOOK_SECRET=$NEW_SECRET/" .env
    pm2 restart github-update
    
-   # Actualitza a GitHub Settings
+   # Actualitza el mateix secret a GitHub Settings
    ```
 
 ### El Deploy no S'Executa Automàticament
@@ -201,13 +173,14 @@ pm2 logs github-update
 
 ## 📝 Variables d'Entorn del Webhook
 
-Aquí estan totes les variables que pot necessitar el webhook:
+El webhook carrega les variables des del fitxer `git-update/.env`:
 
-| Variable | Obligatòria | Exemple | On Definir |
-|----------|------------|---------|-----------|
-| `GITHUB_WEBHOOK_SECRET` | ✅ SÍ | `qN8mPxZ7kL2wRt...` | `.env` o PM2 |
-| `NODE_ENV` | ❌ No | `production` | `.env` o PM2 |
-| `PORT` | ❌ No (def: 3000) | `3000` | `.env` o PM2 |
+| Variable | Obligatòria | Exemple | Descripció |
+|----------|------------|---------|------------|
+| `GITHUB_WEBHOOK_SECRET` | ✅ SÍ | `qN8mPxZ7kL2wRt...` | Secret compartit amb GitHub |
+| `PORT` | ❌ No (def: 3000) | `3000` | Port on escolta el webhook |
+
+**Nota**: Arrenca amb PM2 usant `--node-args="--env-file=.env"` per carregar aquestes variables.
 
 ---
 
