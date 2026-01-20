@@ -1,17 +1,23 @@
 {
   "name": "git-update",
   "version": "1.0.0",
-  "description": "",
+  "description": "Webhook server for automatic GitHub push deployments",
   "license": "ISC",
-  "author": "",
+  "author": "themacboy72@gmail.com",
   "type": "commonjs",
   "main": "github.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --env-file=.env github.js"
+    "start": "node --env-file=.env github.js",
+    "dev": "node --env-file=.env github.js"
   },
   "dependencies": {
     "express": "^5.0.1"
   },
-  "keywords": []
+  "keywords": [
+    "github",
+    "webhook",
+    "deploy",
+    "ci-cd"
+  ]
 }
