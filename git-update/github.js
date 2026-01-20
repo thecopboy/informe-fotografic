@@ -10,7 +10,8 @@ const port = 3000; // O el port que utilitzis
 // Carrega la clau secreta des de les variables d'entorn per seguretat
 const WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
 if (!WEBHOOK_SECRET) {
-    console.error('FATAL ERROR: GITHUB_WEBHOOK_SECRET no està definida a les variables d\'entorn.');
+    console.error('❌ FATAL ERROR: GITHUB_WEBHOOK_SECRET no està definida a les variables d\'entorn.');
+    console.error('📚 Veure docs/WEBHOOK_GITHUB_SETUP.md per instruccions de configuració');
     process.exit(1); // Atura el servidor si la clau no està configurada
 }
 const PROJECT_PATH = '/home/themacboy/informe-fotografic/git-update'; // Ruta absoluta al teu projecte

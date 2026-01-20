@@ -238,6 +238,11 @@ Consulta [config/config.js](config/config.js) per opcions avançades:
 - Configuració JWT
 - Opcions de monitorització
 
+### 🔄 Auto-Deploy amb GitHub Webhook
+Si vols que l'aplicació es desplegui automàticament quan es fa push a GitHub, consulta:
+
+**➡️ [Guia de Configuració del Webhook](docs/WEBHOOK_GITHUB_SETUP.md)**
+
 ## 🧪 Testing
 
 ### 🔍 Tests Implementats

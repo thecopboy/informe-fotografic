@@ -72,15 +72,50 @@ Les 5 vulnerabilitats restants (tar, cacache, make-fetch-happen, node-gyp, sqlit
 
 ---
 
+### 3. **Configuració Webhook GitHub per Auto-Deploy** ✅ **COMPLETAT**
+**Problema**: Error `GITHUB_WEBHOOK_SECRET no està definida` al fer push a GitHub.
+
+**Accions Completades**:
+- [x] Crear documentació completa de webhook a `docs/WEBHOOK_GITHUB_SETUP.md`
+- [x] Afegir `GITHUB_WEBHOOK_SECRET` a `.env.example`
+- [x] Actualitzar error message a `git-update/github.js` amb referència a documentació
+- [x] Afegir instruccions de setup al README
+- [x] Documentar tots els métodes de configuració (variables d'entorn, PM2, etc.)
+- [x] Afegir instruccions de troubleshooting completes
+
+**Fitxers Creats/Modificats**:
+- ✅ `docs/WEBHOOK_GITHUB_SETUP.md` - Guia completa (600+ línies)
+- ✅ `.env.example` - Afegida variable `GITHUB_WEBHOOK_SECRET`
+- ✅ `git-update/github.js` - Error message més informatiu amb referència a docs
+- ✅ `README.md` - Afegit enllaç a guia de webhook
+
+**Guia Inclou**:
+- Setup del secret segur (openssl rand -base64 32)
+- Configuració en GitHub Settings
+- Múltiples opcions de setup al servidor (variables d'entorn, PM2, bash)
+- Verificació completa del funcionament
+- Troubleshooting detallat amb solucions
+- Flux complet del deploy automàtic
+- Millors pràctiques de seguretat
+
+**Impacte**: ALT - Funcionament del auto-deploy al servidor ✅ RESOLT
+**Temps dedicat**: 30 minuts
+**Data**: 20 de Gener de 2026
+
+---
+
 ## 🎯 Millores Completades - Resum Executiu
 
 | # | Tasca | Status | Temps | Data |
 |---|-------|--------|-------|------|
 | 1 | Seguretat - Variables d'Entorn | ✅ COMPLETAT | 1h | 20/1/2026 |
 | 2 | Actualització NPM Packages | ✅ COMPLETAT | 30min | 20/1/2026 |
-| 3 | Gestió d'errors frontend | ⏳ Pendent | 1 dia | - |
-| 4 | Paginació al llistat | ⏳ Pendent | 1 dia | - |
-| 5 | Tests crítics | ⏳ Pendent | 2-3 dies | - |
+| 3 | Configuració Webhook GitHub | ✅ COMPLETAT | 30min | 20/1/2026 |
+| 4 | Gestió d'errors frontend | ⏳ Pendent | 1 dia | - |
+| 5 | Paginació al llistat | ⏳ Pendent | 1 dia | - |
+| 6 | Tests crítics | ⏳ Pendent | 2-3 dies | - |
+
+---
 
 ---
 
