@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Eina per a la generació d'informes fotogràfics policials.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <title>Informe Fotogràfic</title>
+</head>
+<body>
+    <header>
+        <div class="title-container">
+            <!-- Menú hamburger per a mòbils -->
+            <div class="mobile-menu-toggle">
+                <button id="mobile-menu-btn" class="hamburger-btn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            
+            <h1 class="main-title">
+                <span class="title-desktop">Informe Fotogràfic</span>
+                <span class="title-mobile">Inf. Fotogràfic</span>
+            </h1>
+            
+            <!-- Espai buit per equilibrar el layout -->
+            <div class="title-spacer"></div>
+        </div>
+        
+        <!-- Menú de navegació original (desktop) -->
+        <nav class="header-nav" id="header-nav">
+            <span id="nav-indicator-left" class="nav-indicator nav-indicator-left">‹</span>
+                            <button id="new-report-btn" class="nav-btn">Nou</button>
+            <button id="load-json-btn" class="nav-btn">Importar</button>
+            <button id="save-json-btn" class="nav-btn dropdown-btn">
+                <i class="fas fa-file-download"></i>
+                <span class="btn-text">Exportar</span>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <button id="generate-pdf-btn" class="nav-btn">Descarregar</button>
+            <button id="my-reports-btn" class="nav-btn" style="display: none;">Informes</button>
+            <button id="login-btn" class="nav-btn">Iniciar sessió</button>
+            <div class="user-info" id="user-info" style="display: none;">
+                <button id="user-name" class="user-name nav-btn"></button>
+                <button id="logout-btn" class="nav-btn-logout">✕</button>
+            </div>
+            <button id="instruccions-btn" class="nav-btn instruccions-btn" title="Instruccions i consideracions legals">
+                ?
+            </button>
+            <span id="nav-indicator-right" class="nav-indicator nav-indicator-right">›</span>
+        </nav>
+        
+        <!-- Menú desplegable per a mòbils -->
+        <nav class="mobile-nav" id="mobile-nav">
+            <div class="mobile-nav-content">
+                <div class="mobile-nav-top">
+                    <button id="mobile-new-report-btn" class="nav-btn"><i class="fas fa-file-alt"></i> Nou informe</button>
+                    <button id="mobile-load-json-btn" class="nav-btn"><i class="fas fa-upload"></i> Importar</button>
+                    <button id="mobile-save-json-btn" class="nav-btn"><i class="fas fa-file-download"></i> Exportar</button>
+                    <button id="mobile-generate-pdf-btn" class="nav-btn"><i class="fas fa-file-pdf"></i> Descarregar</button>
+                </div>
+                <hr class="mobile-nav-divider">
+                <div class="mobile-nav-bottom">
+                    <div class="mobile-user-info" id="mobile-user-info">
+                        <button id="mobile-my-reports-btn" class="nav-btn"><i class="fas fa-folder-open"></i> Informes</button>
+                        <button id="mobile-user-name" class="user-name"></button>
+                        <button id="mobile-logout-btn" class="mobile-logout-btn">Tancar Sessió</button>
+                    </div>
+                    <button id="mobile-login-btn" class="nav-btn"><i class="fas fa-sign-in-alt"></i> Iniciar sessió</button>
+                    <button id="mobile-instruccions-btn" class="nav-btn mobile-instruccions-btn">
+                        Instruccions / Legal
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section id="upload-section">
+            <form id="main-form">
+            <div id="report-info-section">
+                <!-- Nova estructura de grid per a imatges i camps de l'informe -->
+                <div id="main-report-grid">
+                    <div id="left-image-column">
+                    <image-upload 
+                        title="Escut" 
+                        placeholder="Fes clic o arrossega l'escut" 
+                        accept-types="image/jpeg,image/png" 
+                        max-size="5242880"
+                        id="shield-upload">
+                    </image-upload>
+                    
+                    <image-upload 
+                        title="Imatge de fons" 
+                        placeholder="Fes clic o arrossega la imatge de fons" 
+                        accept-types="image/jpeg,image/png" 
+                        max-size="5242880"
+                        id="background-upload">
+                    </image-upload>
+                </div>
+                <div id="report-fields-grid">
+                        <div class="form-field">
+                            <label for="tipus">Tipus d'expedient:</label>
+                            <input type="text" id="tipus" name="tipus" required autocomplete="off">
+                        </div>
+                        <div class="form-field">
+                            <label for="numero">Número d'expedient:</label>
+                            <input type="text" id="numero" name="numero" required autocomplete="off">
+                        </div>
+                        <div class="form-field-container">
+                            <div class="form-field">
+                                <label for="data">Dia:</label>
+                                <input type="date" id="data" name="data" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="hora">Hora:</label>
+                                <input type="time" id="hora" name="hora" required>
+                        </div>
+                    </div>
+                    <!-- Grup per a Adreça, Assumpte i Signants -->
+                    <div class="form-field-group">
+                        <div class="form-field" id="adreca-field">
+                            <label for="adreca">Adreça:</label>
+                            <input type="text" id="adreca" name="adreca" required autocomplete="off">
+                        </div>
+                        <div class="form-field" id="assumpte-field">
+                            <label for="assumpte">Assumpte:</label>
+                            <input type="text" id="assumpte" name="assumpte" required autocomplete="off">
+                        </div>
+                        <div class="form-field" id="signants-field">
+                            <label for="signants">Signants:</label>
+                            <input type="text" id="signants" name="signants" required autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div id="drop-zone">
+                <p>Fes clic o arrossega les fotografies aquí</p>
+                <input type="file" id="photos-file-input" class="file-input" accept="image/jpeg,image/png" multiple>
+            </div>
+        </section>
+        <section id="preview-section"></section>
+    </main>
+
+    <!-- Input ocult per carregar fitxers JSON -->
+    <input type="file" id="load-json-input" accept=".json" style="display: none;">
+
+    <!-- Modal d'informació genèric -->
+    <div id="info-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <p id="info-modal-text"></p>
+            <button id="info-modal-close-btn" class="modal-button">Tancar</button>
+        </div>
+    </div>
+
+    <!-- Modal d'Informes -->
+    <div id="reports-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Informes desats</h2>
+                <button id="close-reports-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="reports-list" class="reports-list">
+                    <!-- Els informes es carregaran aquí dinàmicament -->
+                </div>
+                <div id="reports-loading" class="loading-message">Carregant els informes...</div>
+                <div id="reports-error" class="error-message" style="display: none;"></div>
+                <div id="no-reports-message" class="no-reports-message" style="display: none;">
+                    No tens cap informe guardat encara.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmació d'Esborrat d'Informes -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar Esborrat</h2>
+                <button id="close-delete-confirm-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="delete-confirm-text">Estàs segur que vols eliminar aquest informe?</p>
+                <div class="form-actions">
+                    <button id="confirm-delete-btn" class="btn btn-danger">Eliminar</button>
+                    <button id="cancel-delete-btn" class="btn btn-secondary">Cancel·lar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmació Genèric -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="confirm-modal-title">Confirmació</h2>
+                <button id="close-confirm-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-modal-message">Estàs segur?</p>
+                <div class="form-actions">
+                    <button id="confirm-modal-yes-btn" class="btn btn-primary">Acceptar</button>
+                    <button id="confirm-modal-no-btn" class="btn btn-secondary">Cancel·lar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'Instruccions i Consideracions Legals -->
+    <div id="instruccions-modal" class="modal">
+        <div class="modal-content" style="overflow-y: auto;">
+            <div class="modal-header">
+                <h2>Instruccions d'ús i Consideracions Legals</h2>
+                <button id="close-instruccions-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Instruccions d'ús</h3>
+                <ul>
+                    <li>Utilitza el menú per crear, editar i descarregar informes fotogràfics.</li>
+                    <li>Pots arrossegar imatges o fer clic per pujar-les.</li>
+                    <li>La posició de les imatges és intercanviable entre elles arrossegant-les l'una sobre l'altra.</li>
+                    <li>Les imatges es poden girar en intervals de 90º.</li>
+                    <li>Botó d'activació de les imatges, per mantenir-les a l'informe sense esborrar-les.</li>
+                    <li>Recorda desar l'informe abans de tancar la sessió o la pestanya.</li>
+                    <li>Per qualsevol dubte, contacta amb l'administrador del sistema.</li>
+                </ul>
+                <h3>Consell avançat:</h3>
+                <ul>
+                    <li>Per esborrar tots els títuls de les fotos d'un cop prem la tecla <kbd>Ctrl</kbd> mentre esborres el títol d’una foto.</li>
+                </ul>
+                
+                <h3>Consideracions legals</h3>
+                <ul>
+                    <li>Aquest programari és d'ús intern i restringit a personal autoritzat.</li>
+                    <li>Les dades introduïdes són confidencials i subjectes a la normativa de protecció de dades.</li>
+                    <li>Està prohibit compartir credencials d'accés o informació sensible amb tercers.</li>
+                    <li>L'ús indegut pot comportar responsabilitats disciplinàries o legals.</li>
+                    <li><strong>Propietat de les imatges:</strong> Les fotografies introduïdes en el sistema mantenen la seva propietat original. L'usuari conserva tots els drets sobre les imatges i assumeix la responsabilitat total del seu contingut i del compliment de la normativa vigent (protecció de dades, drets d'imatge, etc.).</li>
+                </ul>
+                
+                <div style="margin-top: 2em; font-size: 0.95em; color: #555; border-top: 1px solid #ddd; padding-top: 1em;">
+                    &copy; <a href="mailto:themacboy72@gmail.com" style="color: #00539C; text-decoration: none; font-weight: 500;">themacboy72@gmail.com</a>. Tots els drets reservats.<br>
+                    Aquesta aplicació pot registrar l'activitat per motius de seguretat i auditoria.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Perfil d'Usuari -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Perfil d'Usuari</h2>
+                <button id="close-profile-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profile-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="profile-email">Correu electrònic:</label>
+                        <input type="email" id="profile-email" name="email" readonly autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-username">Nom d'usuari:</label>
+                        <input type="text" id="profile-username" name="name" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-signants">Signant per defecte:</label>
+                        <input type="text" id="profile-signants" name="signants" placeholder="Ex: A-082" required autocomplete="off">
+                    </div>
+                    <div class="profile-images-container">
+                        <div class="form-group">
+                            <image-upload 
+                                title="Escut per defecte" 
+                                placeholder="Fes clic o arrossega l'escut" 
+                                accept-types="image/jpeg,image/png" 
+                                max-size="5242880"
+                                id="profile-shield-upload">
+                            </image-upload>
+                    </div>
+                    <div class="form-group">
+                            <image-upload 
+                                title="Imatge de fons" 
+                                placeholder="Fes clic o arrossega la imatge de fons" 
+                                accept-types="image/jpeg,image/png" 
+                                max-size="5242880"
+                                id="profile-background-upload">
+                            </image-upload>
+                        </div>
+                        <div class="form-group">
+                            <image-upload 
+                                title="Signatura" 
+                                placeholder="Fes clic o arrossega la teva signatura" 
+                                accept-types="image/jpeg,image/png" 
+                                max-size="5242880"
+                                id="profile-signature-upload"
+                                show-active-toggle="true">
+                            </image-upload>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-current-password">Contrasenya actual:</label>
+                        <input type="password" id="profile-current-password" name="currentPassword" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-new-password">Nova contrasenya:</label>
+                        <input type="password" id="profile-new-password" name="newPassword" autocomplete="new-password">
+                        <div id="profile-password-strength" class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill"></div>
+                            </div>
+                            <span class="strength-text">Força de la contrasenya</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-confirm-password">Confirmar la nova contrasenya:</label>
+                        <input type="password" id="profile-confirm-password" name="confirmPassword" autocomplete="new-password">
+                    </div>
+                    <div id="profile-error" class="error-message" style="display: none;"></div>
+                    <div id="profile-success" class="success-message" style="display: none;"></div>
+                    <div class="form-actions">
+                        <button type="submit" id="profile-submit-btn" class="btn btn-primary">Guardar Canvis</button>
+                        <button type="button" id="cancel-profile-btn" class="btn btn-secondary">Cancel·lar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Iniciar Sessió</h2>
+                <button id="close-login-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form" class="auth-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="login-email">Usuari:</label>
+                        <input type="email" id="login-email" name="email" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contrasenya:</label>
+                        <input type="password" id="login-password" name="password" required autocomplete="off">
+                    </div>
+                    <div id="login-error" class="error-message" style="display: none;"></div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Iniciar</button>
+                        <button type="button" id="show-register-form" class="btn btn-secondary">Crear Compte</button>
+                    </div>
+                </form>
+
+                <form id="register-form" class="auth-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="register-email">Correu electrònic:</label>
+                        <input type="email" id="register-email" name="email" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-username">Nom d'usuari:</label>
+                        <input type="text" id="register-username" name="username" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Contrasenya:</label>
+                        <input type="password" id="register-password" name="password" required autocomplete="off">
+                        <div id="password-strength" class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill"></div>
+                            </div>
+                            <div class="strength-text">Força de la contrasenya</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Confirmar contrasenya:</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required autocomplete="off">
+                    </div>
+                    <div id="register-error" class="error-message" style="display: none;"></div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Crear Compte</button>
+                        <button type="button" id="show-login-form" class="btn btn-secondary">Tornar al Login</button>
+                    </div>
+                </form>
+                <div id="register-success" class="success-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Llibreries de tercers -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.1/jspdf.umd.min.js"></script>
+
+    <!-- Scripts propis de l'aplicació -->
+    <script type="module">
+        import app from './js/app.js';
+        
+        // Inicialitzar l'aplicació quan el DOM estigui carregat
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => app.init());
+        } else {
+            app.init();
+        }
+    </script>
+
+    <!-- Modal de Càrrega (Reutilitzable) -->
+    <div id="loading-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="close-loading-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="loading-message">Carregant...</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

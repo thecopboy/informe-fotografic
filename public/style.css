@@ -1,0 +1,1722 @@
+/* Variables CSS per a colors i estils */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colors principals */
+    --color-primary: #00539C; /* Blau policia principal */
+    --color-primary-dark: #003f7a; /* Blau policia més fosc */
+    --color-primary-light: #e9f5ff; /* Blau clar per fons */
+    --color-mobile-nav: #3469be; /* Blau fosc per al menú hamburger */
+    
+    /* Colors de text */
+    --color-text-primary: #333;
+    --color-text-secondary: #555;
+    --color-text-muted: #aaa;
+    
+    /* Colors de fons */
+    --color-bg-primary: #f4f4f9;
+    --color-bg-white: #ffffff;
+    --color-bg-hover: #d1d1d8; /* 15% més fosc que bg-primary */
+    
+    /* Colors de bordes */
+    --color-border: #ddd;
+    --color-border-light: #ccc;
+    
+    /* Colors de botons */
+    --color-btn-text-light: #80BFFF;
+    --color-btn-text-hover: rgba(255, 255, 255, 0.8);
+    --color-btn-bg-hover: #0060B5;
+    --color-btn-text-disabled: #80BFFF;
+    
+    /* Colors de modal */
+    --color-modal-overlay: rgba(0, 0, 0, 0.6);
+    --color-modal-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Variables CSS per configuració centralitzada */
+:root {
+    /* Configuració del menú mòbil */
+    --mobile-menu-spacing: 20px;
+    --mobile-menu-first-element-extra-margin: 20px;
+    --mobile-menu-divider-width: 80%;
+    --mobile-menu-divider-max-width: 250px;
+    --mobile-menu-divider-opacity: 0.2;
+    
+    /* Configuració de botons mòbils */
+    --mobile-button-active-transition: 0.2s;
+    --mobile-button-hover-transform: 1px;
+    
+    /* Configuració de modals */
+    --modal-transition-duration: 0.3s;
+    --modal-backdrop-opacity: 0.6;
+    
+    /* Configuració d'animacions */
+    --animation-fade-in-duration: 0.2s;
+    --animation-slide-in-duration: 0.3s;
+    
+    /* Breakpoints */
+    --mobile-breakpoint: 768px;
+    --desktop-breakpoint: 769px; /* Nou breakpoint per a desktop */
+    
+    --gap-standard: 20px;
+        
+    /* Mides de modals */
+    --modal-min-width: 500px;
+    --modal-max-width: 50vw;
+    --modal-width: auto;
+
+    /* Configuració específica per la modal del perfil */
+    --profile-modal-min-width: 600px;
+    --profile-modal-max-width: 60vw;
+    
+    /* Mides de modals mòbils */
+    --modal-mobile-width: 90%;
+    --modal-mobile-min-width: 300px;
+    --modal-mobile-margin: 20px;
+    --modal-mobile-small-width: 95%;
+    --modal-mobile-small-min-width: 280px;
+    --modal-mobile-small-margin: 10px;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    margin: 0 auto;
+    width: 86vw;
+    max-width: 1204px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+header {
+    width: 100%;
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--gap-standard) 0;
+    text-align: center;
+    margin-bottom: var(--gap-standard);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* Contenidor del títol principal - Optimitzat per evitar jank */
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    /* Eliminar transicions CSS per deixar que JavaScript ho gestioni */
+    overflow: hidden;
+    border: none;
+    box-shadow: none;
+    width: 100%;
+    padding: 0;
+    gap: var(--gap-standard); /* Espai entre elements */
+    /* Optimitzacions per hardware acceleration */
+    will-change: height;
+    transform: translateZ(0); /* Forçar layer de composició */
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Títol principal amb estil millorat - Optimitzat per evitar jank */
+.main-title {
+    margin: 0;
+    font-size: 2.8em;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    position: relative;
+    padding: 0px 30px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    /* Eliminar transicions CSS per deixar que JavaScript ho gestioni */
+    flex: 1; /* Ocupar l'espai disponible */
+    text-align: center; /* Centrar el text */
+    width: 100%;
+    max-width: none;
+    /* Optimitzacions per hardware acceleration */
+    will-change: opacity, transform, font-size;
+    transform: translateZ(0); /* Forçar layer de composició */
+    backface-visibility: hidden;
+    /* Optimitzar rendering de text */
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Títols per a diferents mides de pantalla */
+.title-mobile {
+    display: none; /* Per defecte ocult en desktop */
+}
+
+.title-desktop {
+    display: inline; /* Per defecte visible en desktop */
+}
+
+/* Espaiador per equilibrar el layout */
+.title-spacer {
+    display: none; /* Ocult en desktop */
+    flex-shrink: 0;
+    width: 60px; /* Mateixa amplada que el botó hamburger */
+}
+
+.main-title:hover {
+    transform: none;
+    box-shadow: none;
+    color: #ffffff;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Menú hamburger per a mòbils */
+.mobile-menu-toggle {
+    display: none;
+    flex-shrink: 0; /* Evitar que es comprimeixi */
+    z-index: 101;
+    margin-left: 10px; /* Moure 10px cap a la dreta */
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Evitar canvi de fons quan es manté premut el botó hamburger */
+.hamburger-btn:active,
+#mobile-menu-btn:active {
+    background: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* També evitar canvis quan està en estat active (obert) */
+.hamburger-btn.active,
+#mobile-menu-btn.active {
+    background: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Evitar qualsevol efecte de focus */
+.hamburger-btn:focus,
+#mobile-menu-btn:focus {
+    background: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+.hamburger-line {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Animació del menú hamburger quan està obert */
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Menú de navegació mòbil */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0; /* Es calcularà dinàmicament amb JavaScript */
+    left: 0;
+    width: 55%;
+    max-width: 300px;
+    background-color: var(--color-mobile-nav);
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    box-shadow: none; /* Sense ombra quan està tancat */
+}
+
+.mobile-nav.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3); /* Ombra només quan està obert */
+}
+
+.mobile-nav-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh; /* Es calcularà dinàmicament amb JavaScript */
+    gap: var(--mobile-menu-spacing); /* Espaiat uniforme entre tots els elements */
+    padding: var(--mobile-menu-spacing);
+    padding-top: var(--mobile-menu-spacing);
+}
+
+/* Evitar efecte de highlight en tots els elements del menú mòbil */
+.mobile-nav-content *,
+.mobile-nav-content *:hover,
+.mobile-nav-content *:active,
+.mobile-nav-content *:focus {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+/* Contenidors del menú mòbil */
+.mobile-nav-top,
+.mobile-nav-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-menu-spacing); /* Espai entre els botons dins de cada contenidor */
+    width: 100%;
+}
+
+/* Classe base per als botons del menú mòbil */
+.mobile-nav-content button {
+    background: none;
+    border: none;
+    color: var(--color-btn-text-light);
+    font-size: 1.1em;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px; /* Unificat amb els altres botons */
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    width: 100%; /* Ocupar tota l'amplada disponible */
+    max-width: 100%; /* Eliminar la limitació de 300px */
+    text-align: center;
+}
+
+.mobile-nav-content button:hover {
+    color: var(--color-btn-text-hover);
+    background-color: var(--color-btn-bg-hover);
+}
+
+.mobile-nav-content button:active {
+    color: var(--color-btn-text-hover);
+    background-color: var(--color-btn-bg-hover);
+    transform: translateY(var(--mobile-button-hover-transform));
+    transition: none;
+}
+
+/* Evitar que l'estat :active es quedi "enganxat" */
+.mobile-nav-content button:not(:active) {
+    transition: all var(--mobile-button-active-transition) ease-in-out;
+}
+
+.mobile-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mobile-menu-spacing);
+    flex-wrap: nowrap;
+    /* Resta d'estils heretats de .mobile-nav-content button */
+}
+
+.mobile-user-name {
+    font-weight: 700; /* Només la diferència respecte als altres botons */
+    min-width: 80px; /* Amplada mínima per garantir llegibilitat */
+    text-align: center;
+    /* Resta d'estils heretats de .mobile-nav-content button */
+}
+
+.mobile-logout-btn {
+    min-width: 100px; /* Amplada mínima per garantir llegibilitat */
+    text-align: center;
+    /* Tots els estils ja s'hereten de .mobile-nav-content button */
+}
+
+/* Barra de navegació dins del header */
+.header-nav {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-wrap: nowrap;
+    overflow: visible;
+    min-width: 0;
+}
+
+/* Assegurar que header-nav tingui prou espai per als botons d'usuari */
+@media (min-width: 769px) {
+    .header-nav {
+        gap: 25px;
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-nav {
+        gap: 15px;
+        min-width: 400px;
+    }
+}
+
+/* Indicadors de navegació */
+.nav-indicator {
+    color: var(--color-btn-text-light);
+    font-size: 1.5em;
+    font-weight: 300;
+    opacity: 0.7;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    height: 100%;
+    transform: translateY(-2px);
+}
+
+.nav-indicator:hover {
+    opacity: 1;
+}
+
+.nav-indicator-left {
+    margin-right: 10px;
+}
+
+.nav-indicator-right {
+    margin-left: 10px;
+}
+
+/* Botons de navegació */
+.nav-btn {
+    background: none;
+    border: none;
+    color: var(--color-btn-text-light);
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+/* Marge superior específic per al primer botó del menú mòbil */
+.mobile-nav-top button:first-child {
+    margin-top: var(--mobile-menu-first-element-extra-margin);
+}
+
+.nav-btn:hover {
+    color: var(--color-btn-text-hover);
+    background-color: var(--color-btn-bg-hover);
+}
+
+.nav-btn:active {
+    transform: translateY(1px);
+}
+
+.nav-btn:disabled {
+    color: var(--color-btn-text-disabled);
+    cursor: not-allowed;
+}
+
+/* Estils per al botó de generar PDF segons l'estat d'autenticació */
+
+main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-standard); /* Espai entre la secció de càrrega i la de previsualització */
+    box-sizing: border-box;
+    overflow-x: hidden;
+    max-width: 100%;
+    padding: 0;
+}
+
+#upload-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-standard); /* Espai entre la info de l'informe i la zona d'arrossegar */
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#report-info-section {
+    background-color: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: var(--gap-standard);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    /* No flex properties here by default for desktop, they will be applied to #main-report-grid */
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; /* Permet que els camps s'ajustin i es col·loquin en línia si hi ha espai */
+}
+
+.form-field label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+}
+
+.form-field input {
+    padding: 10px;
+    border: 1px solid var(--color-border-light);
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: var(--color-bg-white);
+    font-family: sans-serif; /* Assegura consistència de la font */
+}
+
+/* Contenidor per a la resta de camps de l'informe */
+#report-fields-grid {
+    flex: 1; /* Permet que aquest contenidor ocupi l'espai restant */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Espai entre els camps individuals */
+}
+
+/* Grup d'imatges (escut i imatge de fons) */
+#images-group {
+    display: flex;
+    gap: 15px;
+    margin-top: var(--gap-standard);
+        width: 100%;
+    max-height: 120px;
+    align-items: flex-start;
+}
+#images-group .form-field {
+    flex: 0 0 50%;
+    width: 50%;
+    min-width: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+#images-group .form-field label {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Nou contenidor per agrupar camps que han d'anar junts en línia (com data i hora) */
+.form-field-container {
+    display: flex;
+    gap: 15px; /* Espai entre els camps interns */
+    flex: 1 1 auto; /* Es comporta com un grup flexible dins del grid principal */
+    flex-wrap: nowrap; /* Assegura que els seus fills (data i hora) no saltin de línia */
+    align-items: flex-start; /* Alinea els camps interns a la part superior */
+}
+
+#drop-zone {
+    position: relative;
+    border: 2px dashed var(--color-border-light);
+    border-radius: 10px;
+    padding: 40px 20px; /* Reduït per fer-la menys alta */
+    text-align: center;
+    color: var(--color-text-muted);
+    transition: border-color 0.3s, background-color 0.3s;
+    box-sizing: border-box;
+    background-color: var(--color-bg-white);
+    cursor: pointer;
+}
+
+.file-input {
+    display: none;
+}
+
+#drop-zone.drag-over {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary-light);
+}
+
+#preview-section {
+    width: 100%;
+    margin-top: var(--gap-standard);
+    margin-bottom: var(--gap-standard); /* Marge inferior per evitar que toqui el final de la pantalla */
+    /* Modificacions per a la disposició dels components */
+    background-color: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-standard); /* Espai entre components */
+    justify-content: center;
+    min-height: 200px; /* Alçada mínima, creixerà amb el contingut */
+    height: auto;
+    max-width: 100%;
+}
+
+/* Nou contenidor per agrupar Assumpte i Signants */
+.form-field-group {
+    display: flex;
+    flex-wrap: wrap; /* Permet que els camps es col·loquin en línia i s'emboliquin en pantalles petites */
+    gap: 15px; /* Espai entre els camps individuals */
+    flex: 1 1 100%; /* Ocupa tota l'amplada disponible i força un salt de línia */
+}
+
+#assumpte-field,
+#signants-field,
+#adreca-field {
+    flex: 1 1 100%; /* Fa que cada camp ocupi tota l'amplada i s'apilin */
+}
+
+/* Estils per al modal d'informació genèric */
+.modal-overlay {
+    position: fixed; /* Ocupa tota la pantalla */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--color-modal-overlay);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* Major que la modal de login (2000) per assegurar que aparegui per sobre */
+    opacity: 0; /* Initially invisible */
+    visibility: hidden; /* Initially not interactable */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--color-bg-white);
+    padding: 0; /* Canviat a 0 per gestionar el padding en elements interns */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px var(--color-modal-shadow);
+    text-align: center;
+    min-width: var(--modal-min-width);
+    max-width: var(--modal-max-width);
+    width: var(--modal-width);
+    color: var(--color-text-primary);
+    /* Ajustar al contingut */
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box; /* Incloure padding i border dins l'amplada/alçada */
+}
+
+.modal-content p {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+.modal-content .modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: var(--color-primary);
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.modal-content .modal-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* --- Estils per a dispositius mòbils (Responsive) --- 
+El punt de tall de 768px és un estàndard per a tauletes en mode retrat i mòbils. */
+@media (max-width: 768px) { 
+    /* Ajustaments generals de layout per a mòbils */
+    body {
+        width: 100vw; /* Ocupa tota l'amplada en pantalles petites */
+        max-width: 100vw; /* Forçar amplada màxima */
+        margin: 0; /* Eliminar tots els marges */
+        padding: 0; /* Eliminar tots els paddings */
+        overflow-x: hidden; /* Evitar scroll horitzontal */
+    }
+    
+    /* Els components d'imatge ara gestionen els seus propis estils via Shadow DOM */
+    
+    /* Ajustar modal overlay per a mòbils */
+    .modal-content {
+        width: var(--modal-mobile-width);
+        max-width: var(--modal-mobile-width);
+        min-width: var(--modal-mobile-min-width);
+        margin: var(--modal-mobile-margin);
+    }
+
+    header {
+        width: 100vw; /* Assegurar que el header ocupa tota l'amplada */
+        margin: 0 0 var(--gap-standard) 0; /* Només margin bottom */
+        padding: 10px 0; /* Reduir padding vertical a la meitat per mòbils */
+    }
+
+    main {
+        width: 100vw; /* Assegurar que el main ocupa tota l'amplada */
+        margin: 0; /* Eliminar marges */
+        padding: 0 20px; /* Afegir padding horitzontal al contingut */
+        box-sizing: border-box;
+    }
+
+    /* Adaptació del títol per a mòbils */
+    .title-container {
+        padding: 0; /* Eliminar padding per ocupar tota l'amplada */
+        gap: 15px; /* Menys espai en mòbils */
+    }
+
+    /* Estils específics per al títol mòbil */
+    .main-title {
+        /* Mida i espaiat */
+        font-size: 1.8em;
+        padding: 10px 0;
+        letter-spacing: 1px;
+        
+        /* Layout */
+        width: auto;
+        max-width: none;
+        flex: 1;
+        text-align: center;
+        
+        /* Efectes visuals */
+        box-shadow: none;
+        backdrop-filter: none;
+        border: none;
+        border-radius: 0;
+        
+        /* Interactivitat */
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Mostrar títol mòbil i ocultar desktop */
+    .title-desktop {
+        display: none;
+    }
+
+    .title-mobile {
+        display: inline;
+    }
+
+    /* Eliminar efectes hover en mòbil */
+    .main-title:hover {
+        transform: none;
+        box-shadow: none;
+        color: #ffffff;
+        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Mostrar menú hamburger i amagar menú desktop */
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* Amagar el menú d'escriptori en mòbil */
+    #header-nav {
+        display: none;
+    }
+
+    .mobile-nav {
+        display: block;
+        width: 55%;
+        max-width: 280px; /* Més petit en mòbils */
+        top: 65px; /* Posicionar just on acaba el header mòbil */
+        min-height: calc(100vh - 65px); /* Ajustar l'alçada per no sobrepassar el header */
+    }
+
+    .mobile-nav-content {
+        padding-top: 15px; /* Menys padding en mòbils */
+        min-height: calc(100vh - 80px); /* Ajustar l'alçada per no sobrepassar el header */
+    }
+    
+    /* Ajustar l'espaiador per a mòbils */
+    .title-spacer {
+        display: block; /* Mostrar en mòbils */
+        width: 50px; /* Més petit en mòbils */
+    }
+
+    /* Report Info Section - Main Container */
+    #report-info-section {
+        flex-direction: column; /* Apilem l'escut i els camps d'informació */
+        gap: 15px; /* Consistent gap for mobile */
+        align-items: flex-start;
+    }
+
+    /* Main Report Grid (Images and Fields) */
+    #main-report-grid {
+        display: flex; /* Torna a flex per a mòbils */
+        flex-direction: column;
+        gap: 15px; /* Unifiquem el gap principal per coherència */
+        width: 100%;
+    }
+
+    /* Report Fields Grid (right column in desktop, top in mobile) */
+    #report-fields-grid {
+        flex-direction: column;
+        width: 100%;
+        order: 1; /* Mostrar primer els camps de l'informe */
+        gap: 15px; /* Consistent gap between fields */
+    }
+
+    /* Left Image Column (shield and background image, bottom in mobile) */
+    #left-image-column {
+        flex-direction: column;
+        gap: 15px; /* Mantenim aquest gap per separar escut i fons */
+        width: 100%;
+        order: 2; /* Mostrar després la columna d'imatges */
+    }
+
+    /* Estils unificats per als form-field dins de left-image-column */
+    #left-image-column .form-field {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Estils unificats per a etiquetes dins dels form-field (per a ambdues columnes) */
+    #left-image-column .form-field label,
+    .form-field label { /* S'aplica a totes les etiquetes de form-field en mòbil */
+        font-size: 1em;
+        margin-bottom: 5px; /* Consistent amb la versió d'escriptori */
+        white-space: normal; /* Permetre que el text s'emboliqui en mòbils */
+        text-overflow: clip; /* No el·lipsis en mòbils si l'espai és limitat */
+    }
+
+    /* Els components d'imatge ara gestionen els seus propis estils via Shadow DOM */
+    
+    /* Ajustar estils de form-field general per a mòbils */
+    .form-field {
+        margin-bottom: 0; /* Ajust: Eliminar margin-bottom, l'espaiat entre camps el gestionarà el gap del pare */
+        width: 100%;
+        display: flex; /* Assegurar que és flex container */
+        flex-direction: column; /* Assegurar que els elements s'apilen */
+        gap: 0; /* Eliminar gap ja que ara utilitzem margin-bottom als labels */
+    }
+
+    /* Ajustar estils de input per a mòbils */
+    .form-field input[type="text"],
+    .form-field textarea,
+    .form-field select {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+
+    .form-field textarea {
+        min-height: 80px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .button-group .btn {
+        width: 100%;
+    }
+
+    #photo-gallery-section {
+        padding: 15px;
+    }
+
+    #photo-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+
+    .photo-card {
+        padding: 8px;
+    }
+
+    .photo-card-image {
+        height: 100px;
+    }
+
+    .photo-card-controls .btn {
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
+
+    .photo-modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .photo-modal-image {
+        max-height: 50vh;
+    }
+
+    #report-form-group-1,
+    #report-form-group-2 {
+        flex-direction: column;
+    }
+
+    #report-form-group-1 .form-field,
+    #report-form-group-2 .form-field {
+        flex: none;
+        width: 100%;
+    }
+}
+
+/* Estils per a pantalles molt petites */
+@media (max-width: 480px) {
+    /* Estils específics per al títol mòbil en pantalles molt petites */
+    .main-title {
+        /* Mida i espaiat */
+        font-size: 1.6em;
+        padding: 8px 0;
+        letter-spacing: 0.5px;
+        
+        /* Layout */
+        width: auto;
+        max-width: none;
+        flex: 1;
+        text-align: center;
+        
+        /* Efectes visuals */
+        box-shadow: none;
+        backdrop-filter: none;
+        border: none;
+        border-radius: 0;
+        
+        /* Interactivitat */
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Mantenir títol mòbil visible */
+    .title-desktop {
+        display: none;
+    }
+
+    .title-mobile {
+        display: inline;
+    }
+
+    .title-container {
+        /* Sense padding ni margin per mantenir coherència */
+    }
+
+    .mobile-nav {
+        width: 70%; /* Més ample en pantalles molt petites */
+        max-width: 250px;
+    }
+
+    .mobile-nav-content {
+        padding-top: 10px;
+    }
+    
+    /* Estils específics per a modals en mòbils */
+    .modal .modal-content {
+        max-width: var(--modal-mobile-width);
+        width: var(--modal-mobile-width);
+        min-width: var(--modal-mobile-min-width);
+        max-height: 90vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .modal-body {
+        padding: 20px;
+        overflow-y: auto;
+        flex: 1;
+        max-height: calc(90vh - 80px); /* Restem l'alçada del header */
+    }
+    
+    .modal-header {
+        padding: 15px 20px;
+        flex-shrink: 0;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .auth-form {
+        gap: 15px;
+    }
+    
+    .form-group {
+        gap: 6px;
+    }
+    
+    .form-group input {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+    
+    .form-actions {
+        gap: 8px;
+        margin-top: 15px;
+    }
+    
+    .btn {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+    
+    /* Ajustar modal overlay per a mòbils molt petits */
+    .modal-content {
+        width: var(--modal-mobile-small-width);
+        max-width: var(--modal-mobile-small-width);
+        min-width: var(--modal-mobile-small-min-width);
+        margin: var(--modal-mobile-small-margin);
+    }
+}
+
+/* Estils per a la llista d'informes */
+.reports-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-top: 1px; /* Afegim padding superior per evitar que el primer element es talli al hover */
+}
+
+/* Estils per al botó d'instruccions */
+.instruccions-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-btn-text-light);
+    font-size: 1.2em;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.mobile-instruccions-btn {
+    margin-top: auto;
+    margin-bottom: var(--gap-standard);
+    color: #00539C;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estils específics per a la modal d'instruccions */
+#instruccions-modal .modal-body {
+    text-align: left;
+}
+
+#instruccions-modal .modal-body h3 {
+    text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+}
+
+#instruccions-modal .modal-body h3:first-child {
+    margin-top: 0;
+}
+
+#instruccions-modal .modal-body ul {
+    text-align: left;
+    padding-left: 1.5em;
+}
+
+#instruccions-modal .modal-body li {
+    text-align: left;
+    margin-bottom: 0.5em;
+}
+
+#instruccions-modal .modal-body div[style*="margin-top: 2em"] {
+    text-align: center;
+}
+
+#instruccions-modal .modal-body a[href^="mailto:"] {
+    transition: color 0.3s ease;
+}
+
+#instruccions-modal .modal-body a[href^="mailto:"]:hover {
+    color: #003366 !important;
+    text-decoration: underline !important;
+}
+
+/* Optimització específica per al modal d'instruccions a mòbil */
+@media (max-width: 768px) {
+    #instruccions-modal .modal-content {
+        max-width: 96vw !important;
+        width: 96vw !important;
+        margin: 2vw;
+        min-width: auto !important;
+    }
+    
+    #instruccions-modal .modal-body {
+        padding: 20px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+.loading-message {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+.no-reports-message {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* Estils per a la modal de login */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, var(--modal-backdrop-opacity));
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal .modal-content {
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    padding: 0;
+    border-radius: 15px;
+    min-width: var(--modal-min-width);
+    max-width: var(--modal-max-width);
+    width: var(--modal-width);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out;
+    /* Ajustar al contingut */
+    max-height: 90vh;
+    overflow-y: auto;
+    /* Comportament responsiu millorat */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* Incloure padding i border dins l'amplada/alçada */
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    width: 100%;
+    background: var(--color-primary);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    /* Evitar que creixi */
+    flex-shrink: 0;
+    box-sizing: border-box; /* Incloure padding i border dins l'amplada/alçada */
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 30px; /* Mantenir padding intern */
+    /* Ajustar al contingut */
+    flex: 1;
+    overflow-y: auto;
+    box-sizing: border-box; /* Assegurar que el padding es comptabilitza correctament */
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-standard);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+}
+
+.form-group input {
+    padding: 12px 15px;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    background: white;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 83, 156, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    flex: 1;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: none;
+    color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-hover);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.btn-danger {
+    background: none;
+    color: #dc3545;
+}
+
+.btn-danger:hover {
+    color: #c82333;
+    background-color: var(--color-bg-hover);
+}
+
+.btn-danger:active {
+    transform: translateY(1px);
+}
+
+.btn-secondary {
+    background: none;
+    color: var(--color-text-secondary);
+}
+
+.btn-secondary:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-hover);
+}
+
+.btn-secondary:active {
+    transform: translateY(1px);
+}
+
+/* Estils per als missatges d'error */
+.error-message {
+    background-color: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    text-align: center;
+    animation: errorSlideIn 0.3s ease-out;
+}
+
+.success-message {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    text-align: center;
+    animation: successSlideIn 0.3s ease-out;
+    font-weight: 500;
+}
+
+@keyframes errorSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes successSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estils per a la informació de l'usuari */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    white-space: nowrap;
+    overflow: visible;
+    animation: userSlideIn 0.3s ease-out;
+}
+
+/* Assegurar que els botons dins de .user-info mai es trenquen */
+.user-info > button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+
+/* Estil específic per al botó de nom d'usuari dins de user-info */
+.user-info .user-name {
+    color: var(--color-btn-text-light);
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    text-decoration: none;
+}
+
+.user-name:hover {
+    color: var(--color-btn-text-hover);
+    background-color: var(--color-btn-bg-hover);
+}
+
+@keyframes userSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Estils per a l'indicador de força de contrasenya */
+.password-strength {
+    margin-top: 8px;
+}
+
+.strength-bar {
+    width: 100%;
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.strength-fill.weak {
+    width: 25%;
+    background-color: #dc3545;
+}
+
+.strength-fill.fair {
+    width: 50%;
+    background-color: #ffc107;
+}
+
+.strength-fill.good {
+    width: 75%;
+    background-color: #17a2b8;
+}
+
+.strength-fill.strong {
+    width: 100%;
+    background-color: #28a745;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+/* Estils per al botó X de logout */
+.nav-btn-logout {
+    background: none;
+    border: none;
+    color: var(--color-btn-text-light);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    line-height: 1;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+.nav-btn-logout:hover {
+    color: #dc3545;
+    transform: scale(1.1);
+}
+
+.nav-btn-logout:focus {
+    background: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+.nav-btn-logout:active {
+    color: var(--color-btn-text-hover);
+    background-color: var(--color-btn-bg-hover);
+    transform: translateY(1px);
+    transition: none;
+    text-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Els components d'imatge del perfil ara gestionen els seus propis estils via Shadow DOM */
+
+/* Estils per a camps de només lectura */
+.form-group input[readonly] {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.report-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.report-assumpte {
+    color: #555;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.report-adreca {
+    color: #777;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+/* Separador del menú mòbil */
+.mobile-nav-divider {
+    width: var(--mobile-menu-divider-width);
+    max-width: var(--mobile-menu-divider-max-width);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, var(--mobile-menu-divider-opacity));
+    margin: 0;
+    background: none;
+}
+
+/* --- Notificacions Toast --- */
+.notification-toast {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  padding: 1rem 1.5rem 1rem 1rem;
+  min-width: 200px;
+  max-width: 350px;
+  font-size: 1rem;
+  position: relative;
+  border-left: 6px solid #2196f3;
+  animation: toast-in 0.3s;
+}
+.notification-toast-success {
+  border-left-color: #43a047;
+  background: #e8f5e9;
+  color: #256029;
+}
+.notification-toast-error {
+  border-left-color: #e53935;
+  background: #ffebee;
+  color: #b71c1c;
+}
+.notification-toast-info {
+  border-left-color: #2196f3;
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+.notification-toast-warning {
+  border-left-color: #ffa000;
+  background: #fff8e1;
+  color: #8d6e00;
+}
+.notification-toast-message {
+  flex: 1;
+  margin-right: 1rem;
+}
+.notification-toast-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.3rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  margin-left: 0.5rem;
+}
+.notification-toast-close:hover {
+  opacity: 1;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Garantir que totes les imatges de foto-component no es distorsionin */
+img.foto-component-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: auto;
+    display: block;
+}
+
+/* Nou Grid Layout per Desktop */
+@media (min-width: 769px) {
+
+    #profile-modal .modal-content {
+        min-width: var(--profile-modal-min-width);
+        max-width: var(--profile-modal-max-width);
+        width: auto;
+    }
+
+    /* Contenidor per les imatges del perfil en horitzontal */
+    .profile-images-container {
+        display: flex;
+        gap: var(--gap-standard); /* Gap estàndard que utilitzem */
+    width: 100%;
+    }
+    .profile-images-container .form-group {
+        flex: 1;
+        min-width: 0;
+}
+
+    #main-report-grid {
+        display: grid;
+        grid-template-columns: auto 1fr; /* Columna esquerra (imatges) s'ajusta al contingut, columna dreta (camps) ocupa la resta */
+        grid-template-rows: 1fr; /* Una sola fila que s'estira */
+        gap: var(--gap-standard); /* Espai entre columnes */
+        align-items: start; /* Alinea els elements a la part superior de les cel·les */
+        height: auto; /* Permet que la graella s'ajusti a l'alçada del contingut */
+    }
+
+    #left-image-column {
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Espai entre l'escut i la imatge de fons */
+        height: 100%; /* Fa que la columna esquerra s'estiri verticalment */
+        min-height: 200px; /* Alçada mínima per a la columna d'imatges */
+        width: 200px; /* Amplada fixa per a la columna d'imatges */
+        flex-shrink: 0; /* Evita que la columna es comprimeixi */
+    }
+
+    #left-image-column .form-field { /* Targets image-upload components */
+        flex: 1; /* Permet que l'escut i la imatge de fons comparteixin l'espai vertical igualment */
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Ocupa tota l'amplada de left-image-column */
+        height: 100%; /* Ocupa tota l'alçada de l'espai flex assignat */
+    }
+
+    /* Els components d'imatge ara gestionen els seus propis estils via Shadow DOM */
+
+    #report-fields-grid {
+        display: flex; /* Manté el flex per al seu embolcall intern */
+        flex-wrap: wrap;
+        gap: 15px;
+        flex: 1; /* Permet que creixi i es redueixi */
+        height: 100%; /* Ocupa l'alçada de la seva cel·la de graella */
+        align-content: start; /* Alinea el contingut a l'inici si hi ha espai addicional */
+    }
+}
+
+/* Evitar selecció de text a tots els elements rellevants */
+p,
+label,
+button,
+span,
+h1, h2, h3, h4, h5, h6 {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+/* Estils específics per a la modal de Càrrega */
+#loading-modal .modal-content {
+    min-height: 80px; /* Alçada mínima requerida */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar contingut verticalment */
+    width: 100%; /* Assegurar que ocupa tota l'amplada */
+    /* Assegurar que no hi hagi align-items que interfereixi amb l'amplada completa dels fills */
+}
+
+#loading-modal .modal-header {
+    background: var(--color-primary); /* Fons blau */
+    padding: 20px; /* Padding intern */
+    width: 100%; /* Ocupar tota l'amplada del pare */
+    box-sizing: border-box; /* Incloure padding dins l'amplada */
+    display: flex;
+    align-items: center; /* Centrar el botó 'X' verticalment dins la capçalera */
+    justify-content: flex-end; /* Alinea el botó 'X' a la dreta */
+}
+
+#loading-modal .modal-header .close-btn {
+    /* Eliminat: margin-left: auto; Ja no és necessari amb justify-content: flex-end; al pare */
+}
+
+#loading-modal .modal-body {
+    flex: 1; /* Permetre que ocupi l'espai disponible */
+    display: flex;
+    align-items: center; /* Centrar verticalment el text */
+    justify-content: center; /* Centrar horitzontalment el text */
+    text-align: center; /* Assegurar que el text estigui centrat */
+}

@@ -1,0 +1,75 @@
+# Dependencies
+# Aquesta carpeta conté tots els paquets de npm i es pot regenerar
+# executant `npm install`. No s'ha d'incloure mai al repositori.
+/node_modules
+/git-update/node_modules
+
+
+# Environment variables
+# No commetre mai aquest fitxer al repositori, ja que conté secrets
+# com claus d'API, contrasenyes de base de dades, etc.
+.env
+.env.dev
+/git-update/.env
+
+
+# Fitxers de log
+# Els fitxers de log es generen durant l'execució i no formen part del codi font.
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+# Carpetes on es genera el codi de producció.
+/dist
+/build
+
+# Fitxers de sistema operatiu
+.DS_Store
+Thumbs.db
+
+# Configuració d'editors i IDEs
+.vscode/
+.idea/
+
+# Reports de tests i coverage
+/coverage
+
+# Fitxers de seguretat i configuració
+# No commetre mai fitxers que continguin secrets o claus
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Base de dades i fitxers de dades sensibles
+# Les bases de dades poden contenir dades personals
+*.db
+*.sqlite
+*.sqlite3
+database/app.db
+database/app.db
+database/*.db
+
+# Fitxers temporals i de backup
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# Fitxers de configuració local
+config.local.js
+config.local.json
+
+# Logs de seguretat
+security.log
+access.log
+error.log
+
+# Fitxers de monitorització que poden contenir dades sensibles
+monitoring-data/
+logs/

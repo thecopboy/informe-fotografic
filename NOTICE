@@ -1,0 +1,19 @@
+Informe Fotogràfic - Aplicació Web Professional
+Copyright 2025 themacboy72@gmail.com
+
+Aquest producte inclou programari desenvolupat per:
+- themacboy72@gmail.com (Desenvolupador principal)
+
+Aquest producte inclou programari de tercers sota les següents llicències:
+
+- Express.js - MIT License
+- SQLite3 - Public Domain
+- bcrypt - MIT License
+- jsonwebtoken - MIT License
+- jsPDF - MIT License
+- Helmet - MIT License
+- CORS - MIT License
+
+Per a més informació sobre les llicències de tercers, consulteu els fitxers LICENSE dels respectius paquets.
+
+NOTA: Aquest programari ha estat desenvolupat amb l'assistència d'intel·ligència artificial. L'autor manté tots els drets sobre el codi final i la implementació específica. 

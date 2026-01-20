@@ -1,0 +1,61 @@
+{
+  "name": "informe-fotografic",
+  "description": "Projecte per a un informe fotogràfic",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=21.7.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "start:gc": "node --expose-gc index.js",
+    "dev": "node --expose-gc index.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "clean": "rm -rf node_modules package-lock.json",
+    "build": "echo \"No build step required\"",
+    "preview": "npm start"
+  },
+  "keywords": [
+    "pdf",
+    "fotografia",
+    "informe",
+    "express",
+    "jspdf"
+  ],
+  "author": "themacboy72@gmail.com",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/themacboy/informe-fotografic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/themacboy/informe-fotografic/issues"
+  },
+  "homepage": "https://github.com/username/informe-fotografic#readme"
+}
