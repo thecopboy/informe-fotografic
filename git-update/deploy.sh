@@ -16,7 +16,7 @@ npm install
 
 # Reinicia la teva aplicació Node.js
 # Si utilitzes PM2 (molt recomanat per a Node.js en producció):
-pm2 restart "Informe Fotogràfic"
+pm2 restart "infoto"
 # O si utilitzes systemd directament:
 # sudo systemctl restart <nom_del_teu_servei_node>
 
