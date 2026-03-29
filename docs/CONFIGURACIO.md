@@ -145,61 +145,25 @@ export const config = {
         },
         auth: {
             windowMs: 15 * 60 * 1000, // 15 minuts
-            max: 5 // intents de login per finestra
-        }
-    }
-};
-```
+            max: 5 // intents de login per fine## 🌍 Variables d'Entorn (Docker)
 
-## 🌍 Variables d'Entorn
+Tota la configuració en el sistema actual es gestiona mitjançant el fitxer `.env` i es carrega automàticament pel contenidor Docker.
 
-### Fitxer `.env` (Desenvolupament)
-
-```env
-# Entorn
-NODE_ENV=development
-PORT=33333
-HOST=localhost
-
-# Base de dades
-DB_PATH=./database/app.db
-
-# JWT Secrets (CANVIA EN PRODUCCIÓ!)
-JWT_ACCESS_SECRET=your-super-secret-access-key-here-min-32-chars
-JWT_REFRESH_SECRET=your-super-secret-refresh-key-here-min-32-chars
-
-# Webhook Secret (per al desplegament automàtic)
-GITHUB_WEBHOOK_SECRET=your-github-webhook-secret-here
-
-# Logging
-LOG_LEVEL=DEBUG
-
-# Monitoring
-ALERT_EMAIL=admin@example.com
-ALERT_WEBHOOK=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
-
-# Opcionals
-CORS_ORIGIN=http://localhost:33333
-MAX_FILE_SIZE=20971520
-```
-
-### Fitxer `.env.production` (Producció)
+### Fitxer `.env`
 
 ```env
 # Entorn
 NODE_ENV=production
-PORT=443
-HOST=0.0.0.0
+PORT=33333
+HOST=localhost
 
-# Base de dades
-DB_PATH=/var/lib/informe-fotografic/app.db
+# Base de dades (Ruta interna del contenidor)
+DB_PATH=./database/app.db
 
 # JWT Secrets (OBLIGATORI CANVIAR!)
+# Generar amb: openssl rand -base64 48
 JWT_ACCESS_SECRET=your-production-access-secret-min-64-chars-very-secure
 JWT_REFRESH_SECRET=your-production-refresh-secret-min-64-chars-very-secure
-
-# Webhook Secret (per al desplegament automàtic)
-GITHUB_WEBHOOK_SECRET=your-secure-production-github-webhook-secret
 
 # Logging
 LOG_LEVEL=INFO
@@ -207,94 +171,31 @@ LOG_LEVEL=INFO
 # Monitoring
 ALERT_EMAIL=admin@yourdomain.com
 ALERT_WEBHOOK=https://hooks.slack.com/services/YOUR/PRODUCTION/WEBHOOK
-
-# Producció
-CORS_ORIGIN=https://yourdomain.com,https://www.yourdomain.com
-MAX_FILE_SIZE=52428800
 ```
 
 ## 🏗️ Configuració per Entorns
 
-### Desenvolupament Local
+### Desenvolupament Local (Sense Docker)
+Si vols executar l'aplicació per fer proves ràpides sense docker:
 
 ```bash
 # 1. Crear fitxer .env
 cp .env.example .env
 
-# 2. Configurar variables bàsiques
-NODE_ENV=development
-PORT=33333
-JWT_ACCESS_SECRET=dev-secret-key-at-least-32-characters
-JWT_REFRESH_SECRET=dev-refresh-key-at-least-32-characters
+# 2. Instal·lar dependències
+npm install
 
-# 3. Inicialitzar base de dades
-node database/init.js
-
-# 4. Arrencar en mode desenvolupament
-npm run dev
-```
-
-### Staging/Testing
-
-```bash
-# 1. Configurar variables d'entorn
-export NODE_ENV=staging
-export PORT=8080
-export DB_PATH=/tmp/informe-fotografic-staging.db
-export JWT_ACCESS_SECRET="staging-secret-key"
-export JWT_REFRESH_SECRET="staging-refresh-key"
-
-# 2. Inicialitzar base de dades
-node database/init.js
-
-# 3. Executar tests
-npm test
-
-# 4. Arrencar aplicació
+# 3. Arrencar
 npm start
 ```
 
-### Producció
+### Producció (Docker + proxy-net)
+L'aplicació es desplega com un contenidor en la xarxa `proxy-net`. 
 
-```bash
-# 1. Configurar variables d'entorn del sistema
-sudo tee /etc/environment <<EOF
-NODE_ENV=production
-PORT=443
-DB_PATH=/var/lib/informe-fotografic/app.db
-JWT_ACCESS_SECRET="your-very-secure-production-secret"
-JWT_REFRESH_SECRET="your-very-secure-production-refresh"
-LOG_LEVEL=INFO
-EOF
-
-# 2. Crear directori de dades
-sudo mkdir -p /var/lib/informe-fotografic
-sudo chown app:app /var/lib/informe-fotografic
-
-# 3. Inicialitzar base de dades
-sudo -u app node database/init.js
-
-# 4. Configurar servei systemd
-sudo tee /etc/systemd/system/informe-fotografic.service <<EOF
-[Unit]
-Description=Informe Fotogràfic
-After=network.target
-
-[Service]
-Type=simple
-User=app
-WorkingDirectory=/opt/informe-fotografic
-ExecStart=/usr/bin/node index.js
-Restart=always
-RestartSec=10
-Environment=NODE_ENV=production
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# 5. Activar i arrencar servei
-sudo systemctl enable informe-fotografic
+1. **Configurar secrets**: Crea el `.env` localment.
+2. **Deploy**: Executa `bash scripts/deploy.sh usuari@servidor.com`.
+3. **Persistència**: La base de dades es guarda a la carpeta `./database/app.db` del host i les imatges a `./public/uploads`.
+fic
 sudo systemctl start informe-fotografic
 ```
 

@@ -1,0 +1,20 @@
+node_modules
+npm-debug.log
+.DS_Store
+.git
+.gitignore
+
+# Entorns de variables locals
+.env
+.env.dev
+.env.local
+
+# Bases de dades i fitxers que s'han de muntar amb volums
+database/app.db
+public/uploads/
+logs/
+
+# Fitxers de sistema o IDEs
+.idea
+.vscode
+*.swp

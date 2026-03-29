@@ -1,0 +1,18 @@
+services:
+  app:
+    image: informe-fotografic:latest
+    container_name: informe-fotografic
+    expose:
+      - "80"
+    volumes:
+      - ./database/app.db:/app/database/app.db
+    env_file:
+      - .env
+    networks:
+      - proxy-net
+    restart: unless-stopped
+    # healthcheck es pot posar opcionalment
+
+networks:
+  proxy-net:
+    external: true
