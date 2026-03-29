@@ -24,7 +24,7 @@ echo ""
 echo ">> Pas 1/5: Construint la imatge Docker..."
 # Anem a l'arrel del projecte si l'script s'executa des de /scripts
 cd "$(dirname "$0")/.."
-sudo docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" .
+sudo docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" -f docker/Dockerfile .
 echo "   Imatge construïda: ${IMAGE_NAME}:${IMAGE_TAG}"
 
 # --- 2. Exportar la imatge a un arxiu comprimit ---

@@ -14,10 +14,10 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 # Configuració Nginx
-COPY nginx.conf /etc/nginx/http.d/default.conf
+COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 
 # Configuració Supervisor
-COPY supervisord.conf /etc/supervisord.conf
+COPY docker/supervisord.conf /etc/supervisord.conf
 
 # Copiem codi de l'aplicació
 COPY . .

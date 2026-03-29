@@ -1,5 +1,8 @@
 services:
   app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     image: informe-fotografic:latest
     container_name: informe-fotografic
     expose:

@@ -19,7 +19,8 @@
     "lint:fix": "eslint . --ext .js --fix",
     "clean": "rm -rf node_modules package-lock.json",
     "build": "echo \"No build step required\"",
-    "preview": "npm start"
+    "preview": "npm start",
+    "generate-password": "node scripts/generate_password.js"
   },
   "keywords": [
     "pdf",

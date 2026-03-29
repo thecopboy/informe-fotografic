@@ -195,6 +195,28 @@ L'aplicació es desplega com un contenidor en la xarxa `proxy-net`.
 1. **Configurar secrets**: Crea el `.env` localment.
 2. **Deploy**: Executa `bash scripts/deploy.sh usuari@servidor.com`.
 3. **Persistència**: La base de dades es guarda a la carpeta `./database/app.db` del host i les imatges a `./public/uploads`.
+
+## 🔐 Seguretat i Secrets
+
+### Generar Secrets Segurs
+Utilitza `openssl` per generar claus aleatòries de 48 caràcters:
+```bash
+openssl rand -base64 48
+```
+
+### Checklist de Seguretat
+- [ ] Secrets de producció DIFERENTS dels de desenvolupament.
+- [ ] Fitxer `.env` al `.gitignore`.
+- [ ] Permisos 600 pel fitxer `.env` al servidor (`chmod 600 .env`).
+- [ ] Rotació de secrets cada 3-6 mesos.
+
+### Què fer si s'exposa un secret
+1. Genera nous secrets al `.env`.
+2. Reinicia el contenidor: `docker compose restart`.
+3. Invalida tokens antics:
+```bash
+sqlite3 database/app.db "DELETE FROM revoked_tokens;"
+```
 fic
 sudo systemctl start informe-fotografic
 ```
