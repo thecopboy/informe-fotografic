@@ -24,9 +24,11 @@ COPY . .
 
 # Creació de directoris necessaris (garantim que existeixen amb els permisos correctes al runtime)
 RUN mkdir -p /app/database \
+    && mkdir -p /app/data \
     && mkdir -p /app/public/uploads \
     && mkdir -p /app/logs \
     && chown -R node:node /app/database \
+    && chown -R node:node /app/data \
     && chown -R node:node /app/public/uploads \
     && chown -R node:node /app/logs
 

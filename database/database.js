@@ -9,8 +9,10 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+import config from '../config/config.js';
+
 // Ruta de la base de dades
-const dbPath = join(__dirname, 'app.db');
+const dbPath = config.database.path;
 
 class Database {
     constructor() {
