@@ -6,7 +6,7 @@ L'aplicació **Informe Fotogràfic** és una eina modular per a la gestió d'inf
 ### Tecnologies Core:
 - **Frontend**: Vanila JS (ES6+), Web Components, State Management reactiu.
 - **Backend**: Node.js, Express.js.
-- **Dades**: SQLite (Base de dades local i portable).
+- **Dades**: PostgreSQL (Base de dades relacional robusta i escalable).
 - **Seguretat**: Autenticació JWT (Access & Refresh tokens).
 
 ---
@@ -39,7 +39,7 @@ Estructura RESTful organitzada per mòduls funcionals.
 ### Estructura de Carpetes:
 - `/auth`: Controladors, rutes i middleware per a l'accés d'usuaris.
 - `/reports`: Lògica per a la persistència d'informes.
-- `/database`: Capa d'accés a dades (SQLite).
+- `/database`: Capa d'accés a dades (PostgreSQL).
 - `/middleware`: Handlers globals (logging, errors, monitoring).
 - `/utils`: Utilitats compartides (Logger, ErrorHandler).
 
@@ -51,7 +51,7 @@ Estructura RESTful organitzada per mòduls funcionals.
 ---
 
 ## 🗄️ Model de Dades
-L'aplicació utilitza SQLite. Les dades complexes dels informes es guarden com a objectes JSON en un camp de text per permetre flexibilitat en l'estructura dels informes sense canviar l'esquema de la BD.
+L'aplicació utilitza PostgreSQL. Les dades complexes dels informes es guarden com a objectes JSON en un camp de text per permetre flexibilitat en l'estructura dels informes sense canviar l'esquema de la BD.
 
 ### Taules Principals:
 - `users`: Credencials i dades bàsiques.

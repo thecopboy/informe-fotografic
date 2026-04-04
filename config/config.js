@@ -21,10 +21,17 @@ export const config = {
         environment: process.env.NODE_ENV || 'development'
     },
 
-    // Configuració de la base de dades
+    // Configuració de la base de dades PostgreSQL
     database: {
-        path: process.env.DB_PATH || './database/app.db',
-        timeout: 30000
+        url: process.env.DATABASE_URL || null,
+        host: process.env.PGHOST || 'localhost',
+        port: parseInt(process.env.PGPORT || '5432', 10),
+        name: process.env.PGDATABASE || 'informe_fotografic',
+        user: process.env.PGUSER || 'postgres',
+        password: process.env.PGPASSWORD || '',
+        poolMax: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 30000
     },
 
     // Configuració JWT

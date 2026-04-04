@@ -1,4 +1,22 @@
 services:
+  db:
+    image: postgres:17-alpine
+    container_name: informe-fotografic-db
+    environment:
+      POSTGRES_DB: informe_fotografic
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PGPASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d informe_fotografic"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   app:
     build:
       context: .
@@ -8,14 +26,27 @@ services:
     expose:
       - "80"
     volumes:
-      - ./database/app.db:/app/database/app.db
+      - ./public/uploads:/app/public/uploads
+      - ./logs:/app/logs
     env_file:
       - .env
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: informe_fotografic
+      PGUSER: postgres
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
+      - internal
       - proxy-net
     restart: unless-stopped
-    # healthcheck es pot posar opcionalment
+
+volumes:
+  postgres_data:
 
 networks:
+  internal:
   proxy-net:
     external: true

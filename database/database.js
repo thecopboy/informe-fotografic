@@ -1,96 +1,65 @@
 /**
- * Servei de connexió a la base de dades SQLite
+ * Servei de connexió a la base de dades PostgreSQL
  */
 
-import sqlite3 from 'sqlite3';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import pg from 'pg';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const { Pool } = pg;
 
-// Ruta de la base de dades
-const dbPath = join(__dirname, 'app.db');
+// Configuració del pool de connexions PostgreSQL
+const poolConfig = {
+    connectionString: process.env.DATABASE_URL,
+    host: process.env.PGHOST || 'localhost',
+    port: parseInt(process.env.PGPORT || '5432', 10),
+    database: process.env.PGDATABASE || 'informe_fotografic',
+    user: process.env.PGUSER || 'postgres',
+    password: process.env.PGPASSWORD || '',
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 30000
+};
+
+// Pool compartit per tota l'aplicació
+const sharedPool = new Pool(poolConfig);
+
+sharedPool.on('error', (err) => {
+    console.error('Error inesperat al pool de PostgreSQL:', err.message);
+});
+
+/**
+ * Converteix els placeholders '?' d'estil SQLite als placeholders '$N' de PostgreSQL
+ * @param {string} sql - Consulta SQL amb placeholders '?'
+ * @returns {string} Consulta SQL amb placeholders '$N'
+ */
+function convertPlaceholders(sql) {
+    let index = 0;
+    return sql.replace(/\?/g, () => `$${++index}`);
+}
 
 class Database {
     constructor() {
-        this.db = null;
-        this.isConnected = false;
+        this._connected = false;
     }
 
     /**
-     * Conectar a la base de dades
+     * Connectar a la base de dades (verifica la connexió al pool)
      */
-    connect() {
-        return new Promise((resolve, reject) => {
-            // Si ja estem connectats, resoldre directament
-            if (this.isConnected && this.db) {
-                resolve();
-                return;
-            }
-
-            // Si hi ha una connexió anterior, tancar-la primer
-            if (this.db) {
-                try {
-                    this.db.close();
-                } catch (error) {
-                    console.log('Tancant connexió anterior...');
-                }
-            }
-
-            this.db = new sqlite3.Database(dbPath, (err) => {
-                if (err) {
-                    console.error('Error en connectar a la base de dades:', err.message);
-                    this.isConnected = false;
-                    this.db = null;
-                    reject(err);
-                    return; // <-- Evita accedir a this.db.run si la connexió ha fallat
-                }
-                    console.log('Connexió a la base de dades SQLite establerta.');
-                    this.isConnected = true;
-                    
-                    // Habilitar foreign keys
-                    this.db.run('PRAGMA foreign_keys = ON');
-                    
-                    resolve();
-            });
-        });
+    async connect() {
+        if (this._connected) {
+            return;
+        }
+        // Verificar la connexió fent una consulta simple
+        const client = await sharedPool.connect();
+        client.release();
+        this._connected = true;
+        console.log('Connexió a la base de dades PostgreSQL establerta.');
     }
 
     /**
-     * Tancar la connexió a la base de dades
+     * Alliberar la connexió (amb pool, no cal tancar)
      */
-    close() {
-        return new Promise((resolve) => {
-            if (this.db && this.isConnected) {
-                try {
-                    this.db.close((err) => {
-                        if (err) {
-                            // Si l'error és que la base de dades ja està tancada, no és un problema
-                            if (err.code === 'SQLITE_MISUSE' && err.message.includes('Database is closed')) {
-                                console.log('Base de dades ja tancada.');
-                            } else {
-                                console.error('Error en tancar la base de dades:', err.message);
-                            }
-                        } else {
-                            console.log('Connexió a la base de dades tancada.');
-                        }
-                        this.isConnected = false;
-                        this.db = null;
-                        resolve();
-                    });
-                } catch (error) {
-                    console.error('Error en tancar la base de dades:', error.message);
-                    this.isConnected = false;
-                    this.db = null;
-                    resolve();
-                }
-            } else {
-                this.isConnected = false;
-                this.db = null;
-                resolve();
-            }
-        });
+    async close() {
+        this._connected = false;
     }
 
     /**
@@ -99,22 +68,18 @@ class Database {
      * @param {Array} params - Paràmetres de la consulta
      * @returns {Promise<Array>} Resultats de la consulta
      */
-    query(sql, params = []) {
-        return new Promise((resolve, reject) => {
-            if (!this.isConnected) {
-                reject(new Error('Base de dades no connectada'));
-                return;
-            }
-
-            this.db.all(sql, params, (err, rows) => {
-                if (err) {
-                    console.error('Error en executar consulta:', err.message);
-                    reject(err);
-                } else {
-                    resolve(rows);
-                }
-            });
-        });
+    async query(sql, params = []) {
+        if (!this._connected) {
+            throw new Error('Base de dades no connectada');
+        }
+        try {
+            const pgSql = convertPlaceholders(sql);
+            const result = await sharedPool.query(pgSql, params);
+            return result.rows;
+        } catch (err) {
+            console.error('Error en executar consulta:', err.message);
+            throw err;
+        }
     }
 
     /**
@@ -123,49 +88,46 @@ class Database {
      * @param {Array} params - Paràmetres de la consulta
      * @returns {Promise<Object|null>} Resultat de la consulta
      */
-    queryOne(sql, params = []) {
-        return new Promise((resolve, reject) => {
-            if (!this.isConnected) {
-                reject(new Error('Base de dades no connectada'));
-                return;
-            }
-
-            this.db.get(sql, params, (err, row) => {
-                if (err) {
-                    console.error('Error en executar consulta:', err.message);
-                    reject(err);
-                } else {
-                    resolve(row);
-                }
-            });
-        });
+    async queryOne(sql, params = []) {
+        if (!this._connected) {
+            throw new Error('Base de dades no connectada');
+        }
+        try {
+            const pgSql = convertPlaceholders(sql);
+            const result = await sharedPool.query(pgSql, params);
+            return result.rows[0] || null;
+        } catch (err) {
+            console.error('Error en executar consulta:', err.message);
+            throw err;
+        }
     }
 
     /**
      * Executar una consulta INSERT, UPDATE o DELETE
      * @param {string} sql - Consulta SQL
      * @param {Array} params - Paràmetres de la consulta
-     * @returns {Promise<Object>} Informació del resultat
+     * @returns {Promise<Object>} Informació del resultat ({ lastID, changes })
      */
-    run(sql, params = []) {
-        return new Promise((resolve, reject) => {
-            if (!this.isConnected) {
-                reject(new Error('Base de dades no connectada'));
-                return;
+    async run(sql, params = []) {
+        if (!this._connected) {
+            throw new Error('Base de dades no connectada');
+        }
+        try {
+            let pgSql = convertPlaceholders(sql);
+            // Afegir RETURNING id per obtenir el lastID en INSERT
+            const isInsert = /^\s*INSERT\s/i.test(pgSql);
+            if (isInsert && !/RETURNING/i.test(pgSql)) {
+                pgSql = `${pgSql} RETURNING id`;
             }
-
-            this.db.run(sql, params, function(err) {
-                if (err) {
-                    console.error('Error en executar consulta:', err.message);
-                    reject(err);
-                } else {
-                    resolve({
-                        lastID: this.lastID,
-                        changes: this.changes
-                    });
-                }
-            });
-        });
+            const result = await sharedPool.query(pgSql, params);
+            return {
+                lastID: result.rows[0]?.id || null,
+                changes: result.rowCount
+            };
+        } catch (err) {
+            console.error('Error en executar consulta:', err.message);
+            throw err;
+        }
     }
 
     /**
@@ -173,55 +135,42 @@ class Database {
      * @param {Array} queries - Array d'objectes {sql, params}
      * @returns {Promise<Array>} Resultats de les consultes
      */
-    transaction(queries) {
-        return new Promise((resolve, reject) => {
-            if (!this.isConnected) {
-                reject(new Error('Base de dades no connectada'));
-                return;
-            }
-
-            this.db.serialize(() => {
-                this.db.run('BEGIN TRANSACTION');
-                
-                const results = [];
-                let hasError = false;
-
-                queries.forEach((query, index) => {
-                    if (hasError) return;
-
-                    this.db.run(query.sql, query.params, function(err) {
-                        if (err) {
-                            hasError = true;
-                            console.error('Error en transacció:', err.message);
-                            this.db.run('ROLLBACK');
-                            reject(err);
-                        } else {
-                            results.push({
-                                lastID: this.lastID,
-                                changes: this.changes
-                            });
-
-                            if (index === queries.length - 1) {
-                                this.db.run('COMMIT');
-                                resolve(results);
-                            }
-                        }
-                    });
+    async transaction(queries) {
+        if (!this._connected) {
+            throw new Error('Base de dades no connectada');
+        }
+        const client = await sharedPool.connect();
+        try {
+            await client.query('BEGIN');
+            const results = [];
+            for (const query of queries) {
+                let pgSql = convertPlaceholders(query.sql);
+                const isInsert = /^\s*INSERT\s/i.test(pgSql);
+                if (isInsert && !/RETURNING/i.test(pgSql)) {
+                    pgSql = `${pgSql} RETURNING id`;
+                }
+                const result = await client.query(pgSql, query.params || []);
+                results.push({
+                    lastID: result.rows[0]?.id || null,
+                    changes: result.rowCount
                 });
-            });
-        });
-    }
-
-    /**
-     * Verificar si la connexió està activa
-     * @returns {boolean}
-     */
-    isConnected() {
-        return this.isConnected;
+            }
+            await client.query('COMMIT');
+            return results;
+        } catch (err) {
+            await client.query('ROLLBACK');
+            console.error('Error en transacció:', err.message);
+            throw err;
+        } finally {
+            client.release();
+        }
     }
 }
 
 // Exporta una funció per crear una nova instància de Database
 export function createDatabase() {
     return new Database();
-} 
+}
+
+// Exporta el pool per a ús directe si cal (ex: migracions)
+export { sharedPool };
