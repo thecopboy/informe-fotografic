@@ -27,7 +27,7 @@ export const profileController = {
                 let profileData = {};
                 try {
                     const profile = await database.queryOne(
-                        'SELECT signants, shield, backgroundImage, signatureImage FROM user_profiles WHERE user_id = ?',
+                        'SELECT signants, shield, "backgroundImage", "signatureImage" FROM user_profiles WHERE user_id = ?',
                         [userId]
                     );
                     if (profile) {
@@ -106,13 +106,13 @@ export const profileController = {
                     if (existingProfile) {
                         // Actualitzar perfil existent
                         await database.run(
-                            'UPDATE user_profiles SET signants = ?, shield = ?, backgroundImage = ?, signatureImage = ? WHERE user_id = ?',
+                            'UPDATE user_profiles SET signants = ?, shield = ?, "backgroundImage" = ?, "signatureImage" = ? WHERE user_id = ?',
                             [signants || null, shield || null, backgroundImage || null, signatureImage || null, userId]
                         );
                     } else {
                         // Crear nova entrada de perfil
                         await database.run(
-                            'INSERT INTO user_profiles (user_id, signants, shield, backgroundImage, signatureImage) VALUES (?, ?, ?, ?, ?)',
+                            'INSERT INTO user_profiles (user_id, signants, shield, "backgroundImage", "signatureImage") VALUES (?, ?, ?, ?, ?)',
                             [userId, signants || null, shield || null, backgroundImage || null, signatureImage || null]
                         );
                     }

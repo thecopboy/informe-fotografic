@@ -195,7 +195,7 @@ app.listen(port, () => {
     logger.info(`📍 Port: ${port}`);
     logger.info(`🌐 URL: http://localhost:${port}`);
     logger.info(`🔒 Seguretat: Helmet, CORS i Rate Limiting actius`);
-    logger.info(`📊 Base de dades: ${config.database.path}`);
+    logger.info(`📊 Base de dades: PostgreSQL @ ${config.database.host}:${config.database.port}/${config.database.name}`);
     logger.info(`📈 Monitoring: http://localhost:${port}/monitoring`);
     
     // Inicialitzar monitoring

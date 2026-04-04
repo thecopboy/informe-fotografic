@@ -102,7 +102,7 @@
 - [ ] Alertes per errors crítics
 
 ### 💾 Backup i Resiliència
-- [ ] Script diari per backup de SQLite
+- [ ] Script diari per backup de PostgreSQL
 - [ ] Rotació de backups (últims 7 dies)
 - [ ] Backup remot (S3 o similar)
 - [ ] Script de restauració amb tests mensuals

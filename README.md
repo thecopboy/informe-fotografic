@@ -128,7 +128,7 @@ Frontend (ES6+ Modules):
 Backend (Node.js + Express):
 ├── 🔐 Auth Module       # Autenticació JWT
 ├── 📄 Reports Module    # CRUD d'informes
-├── 🗄️ Database Layer   # SQLite amb 6 taules
+├── 🗄️ Database Layer   # PostgreSQL amb 6 taules
 ├── 🛡️ Middleware       # Seguretat i validació
 └── 📊 Monitoring       # Logs i mètriques
 ```
@@ -203,8 +203,8 @@ openssl rand -base64 48  # JWT_REFRESH_SECRET
 - `JWT_REFRESH_SECRET`: Secret per a tokens de refresc.
 
 ### 🗄️ Persistència de Dades
-Les dades es guarden al volum definit al `docker-compose.yml`:
-- `./database/app.db`: Base de dades SQLite.
+Les dades es guarden en:
+- **PostgreSQL**: Base de dades en un contenidor dedicat (volum `postgres_data`).
 - `./public/uploads`: Imatges pujades pels usuaris.
 
 ## 🧪 Testing

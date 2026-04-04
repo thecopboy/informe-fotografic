@@ -17,10 +17,17 @@ export const config = {
         environment: process.env.NODE_ENV || 'development'
     },
 
-    // Configuració de la base de dades
+    // Configuració de la base de dades PostgreSQL
     database: {
-        path: process.env.DB_PATH || './database/app.db',
-        timeout: 30000
+        url: process.env.DATABASE_URL || null,
+        host: process.env.PGHOST || 'localhost',
+        port: parseInt(process.env.PGPORT || '5432', 10),
+        name: process.env.PGDATABASE || 'informe_fotografic',
+        user: process.env.PGUSER || 'postgres',
+        password: process.env.PGPASSWORD || '',
+        poolMax: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 30000
     },
 
     // Configuració JWT
@@ -157,8 +164,13 @@ NODE_ENV=production
 PORT=33333
 HOST=localhost
 
-# Base de dades (Ruta interna del contenidor)
-DB_PATH=./database/app.db
+# Base de dades PostgreSQL
+DATABASE_URL=postgresql://postgres:password@localhost:5432/informe_fotografic
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=informe_fotografic
+PGUSER=postgres
+PGPASSWORD=password
 
 # JWT Secrets (OBLIGATORI CANVIAR!)
 # Generar amb: openssl rand -base64 48
@@ -194,7 +206,7 @@ L'aplicació es desplega com un contenidor en la xarxa `proxy-net`.
 
 1. **Configurar secrets**: Crea el `.env` localment.
 2. **Deploy**: Executa `bash scripts/deploy.sh usuari@servidor.com`.
-3. **Persistència**: La base de dades es guarda a la carpeta `./database/app.db` del host i les imatges a `./public/uploads`.
+3. **Persistència**: La base de dades es guarda al volum Docker `postgres_data` i les imatges a `./public/uploads`.
 
 ## 🔐 Seguretat i Secrets
 
@@ -215,7 +227,7 @@ openssl rand -base64 48
 2. Reinicia el contenidor: `docker compose restart`.
 3. Invalida tokens antics:
 ```bash
-sqlite3 database/app.db "DELETE FROM revoked_tokens;"
+psql $DATABASE_URL -c "DELETE FROM revoked_tokens;"
 ```
 fic
 sudo systemctl start informe-fotografic
@@ -444,15 +456,15 @@ cors: {
 
 ```javascript
 database: {
-    path: process.env.DB_PATH || './database/app.db',
-    timeout: 30000,
-    busyTimeout: 30000,
-    pragma: {
-        journal_mode: 'WAL',
-        synchronous: 'NORMAL',
-        cache_size: 1000,
-        foreign_keys: true
-    }
+    url: process.env.DATABASE_URL || null,
+    host: process.env.PGHOST || 'localhost',
+    port: parseInt(process.env.PGPORT || '5432', 10),
+    name: process.env.PGDATABASE || 'informe_fotografic',
+    user: process.env.PGUSER || 'postgres',
+    password: process.env.PGPASSWORD || '',
+    poolMax: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 30000
 }
 ```
 
@@ -460,50 +472,42 @@ database: {
 
 ```javascript
 database: {
-    path: '/var/lib/informe-fotografic/app.db',
-    timeout: 60000,
-    busyTimeout: 60000,
-    pragma: {
-        journal_mode: 'WAL',
-        synchronous: 'FULL',
-        cache_size: 10000,
-        foreign_keys: true,
-        temp_store: 'memory'
-    },
-    backup: {
-        enabled: true,
-        interval: 6 * 60 * 60 * 1000, // 6 hores
-        retention: 7, // 7 backups
-        path: '/var/backups/informe-fotografic'
-    }
+    url: process.env.DATABASE_URL,
+    host: process.env.PGHOST,
+    port: parseInt(process.env.PGPORT, 10),
+    name: process.env.PGDATABASE,
+    user: process.env.PGUSER,
+    password: process.env.PGPASSWORD,
+    poolMax: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 30000
 }
 ```
 
 ## 🔄 Configuració de Backup
 
-### Backup Automàtic
+### Backup Automàtic de PostgreSQL
 
 ```bash
 #!/bin/bash
 # /usr/local/bin/backup-informe.sh
 
-DB_PATH="/var/lib/informe-fotografic/app.db"
 BACKUP_DIR="/var/backups/informe-fotografic"
 DATE=$(date +%Y%m%d_%H%M%S)
 
 # Crear directori de backup
 mkdir -p $BACKUP_DIR
 
-# Backup de la base de dades
-sqlite3 $DB_PATH ".backup $BACKUP_DIR/app_$DATE.db"
+# Backup de la base de dades PostgreSQL
+pg_dump $DATABASE_URL > "$BACKUP_DIR/app_$DATE.sql"
 
 # Comprimir backup
-gzip "$BACKUP_DIR/app_$DATE.db"
+gzip "$BACKUP_DIR/app_$DATE.sql"
 
 # Mantenir només els últims 7 backups
-find $BACKUP_DIR -name "app_*.db.gz" -mtime +7 -delete
+find $BACKUP_DIR -name "app_*.sql.gz" -mtime +7 -delete
 
-echo "Backup completat: app_$DATE.db.gz"
+echo "Backup completat: app_$DATE.sql.gz"
 ```
 
 ### Cron Job per Backup
@@ -609,10 +613,10 @@ else
 fi
 
 # Verificar base de dades
-if [ -f "$DB_PATH" ]; then
-    echo "✅ Base de dades trobada: $DB_PATH"
+if psql "$DATABASE_URL" -c "SELECT 1" > /dev/null 2>&1; then
+    echo "✅ Connexió a PostgreSQL correcta"
 else
-    echo "❌ Base de dades no trobada: $DB_PATH"
+    echo "❌ No es pot connectar a PostgreSQL"
 fi
 
 # Verificar port
@@ -632,7 +636,9 @@ echo "Verificació completada"
 ```javascript
 export const config = {
     server: { port: 3000 },
-    database: { path: './app.db' },
+    database: {
+        url: 'postgresql://postgres:password@localhost:5432/informe_fotografic'
+    },
     jwt: {
         accessTokenSecret: 'dev-secret',
         refreshTokenSecret: 'dev-refresh'
@@ -650,12 +656,13 @@ export const config = {
         environment: 'production'
     },
     database: {
-        path: '/var/lib/app/app.db',
-        timeout: 60000,
-        pragma: {
-            journal_mode: 'WAL',
-            synchronous: 'FULL'
-        }
+        url: process.env.DATABASE_URL,
+        host: process.env.PGHOST,
+        port: parseInt(process.env.PGPORT, 10),
+        name: process.env.PGDATABASE,
+        user: process.env.PGUSER,
+        password: process.env.PGPASSWORD,
+        poolMax: 20
     },
     jwt: {
         accessTokenSecret: process.env.JWT_ACCESS_SECRET,
