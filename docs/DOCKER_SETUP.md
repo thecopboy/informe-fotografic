@@ -4,7 +4,7 @@ Aquesta aplicació està dissenyada per funcionar dins d'un contenidor Docker en
 
 ## 1. Arquitectura
 - **Imatge**: Node.js 24 Alpine + Nginx + Supervisord.
-- **Base de dades**: PostgreSQL 17 Alpine en un contenidor dedicat.
+- **Base de dades**: PostgreSQL 18 Alpine en un contenidor dedicat.
 - **Xarxa**: Utilitza l'xarxa externa `proxy-net` per comunicar-se amb el Reverse Proxy mestre.
 - **Port**: Exposa el port `80` internament a la xarxa Docker.
 
@@ -32,7 +32,7 @@ El fitxer gestiona dos serveis: la base de dades PostgreSQL i l'aplicació:
 ```yaml
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: informe-fotografic-db
     environment:
       POSTGRES_DB: informe_fotografic
