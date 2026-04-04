@@ -173,6 +173,7 @@ export class ReportManager {
         this.elements.newReportBtn = document.getElementById('new-report-btn');
         this.elements.generatePdfBtn = document.getElementById('generate-pdf-btn');
         this.elements.saveJsonBtn = document.getElementById('save-json-btn');
+        this.elements.saveReportBtn = document.getElementById('save-report-btn');
         
         // Elements de modals
         this.elements.reportsModal = document.getElementById('reports-modal');
@@ -193,6 +194,7 @@ export class ReportManager {
         this.elements.mobileMyReportsBtn = document.getElementById('mobile-my-reports-btn');
         this.elements.mobileGeneratePdfBtn = document.getElementById('mobile-generate-pdf-btn');
         this.elements.mobileSaveJsonBtn = document.getElementById('mobile-save-json-btn');
+        this.elements.mobileSaveReportBtn = document.getElementById('mobile-save-report-btn');
         // Botó informes (escriptori)
         this.elements.myReportsBtn = document.getElementById('my-reports-btn');
     }
@@ -237,6 +239,18 @@ export class ReportManager {
             });
         }
         
+        // Botó Guardar informe
+        if (this.elements.saveReportBtn) {
+            this.elements.saveReportBtn.addEventListener('click', () => this.handleSaveReport());
+        }
+        
+        if (this.elements.mobileSaveReportBtn) {
+            this.elements.mobileSaveReportBtn.addEventListener('click', () => {
+                this.handleSaveReport();
+                this.closeMobileMenu();
+            });
+        }
+        
         // Modal d'informes
         if (this.elements.closeReportsModal) {
             this.elements.closeReportsModal.addEventListener('click', () => this.hideReportsModal());
@@ -275,7 +289,7 @@ export class ReportManager {
     }
 
     /**
-     * Gestionar generació de PDF
+     * Gestionar generació de PDF exclusivament
      */
     async handleGeneratePdf() {
         try {
@@ -294,26 +308,9 @@ export class ReportManager {
                 number: ++activePhotoCounter
             }));
 
-            const isAuthenticated = this.stateManager.get('user.isAuthenticated');
-            const isEditing = this.stateManager.get('currentReport.isEditing');
-            const currentReport = this.stateManager.get('currentReport');
-            
-            if (isAuthenticated) {
-                if (isEditing) {
-                    // Actualitzar a la base de dades i després generar PDF (sense guardar de nou)
-                    await this.updateReportInDatabase(currentReport.id, reportData);
-                    await generateClientPdf(reportDataForPdf, false); // No guardar de nou, ja s'ha actualitzat
-                    this.notificationManager.success('Informe actualitzat i descarregat correctament!');
-                } else {
-                    await generateClientPdf(reportDataForPdf, true); // Crear nou informe
-                    this.notificationManager.success('Informe creat correctament!');
-                }
-            } else {
-                await generateClientPdf(reportDataForPdf, false);
-                this.notificationManager.success('Informe generat correctament!');
-            }
+            await generateClientPdf(reportDataForPdf);
+            this.notificationManager.success('PDF generat correctament!');
         } catch (error) {
-            
             // Mostrar notificació d'error específica
             if (error.message && error.message.includes('validació')) {
                 this.notificationManager.warning(error.message);
@@ -322,7 +319,60 @@ export class ReportManager {
             }
             
             ErrorBoundary.handleError(error, {}, 'generate-pdf');
+        }
+    }
+
+    /**
+     * Gestionar guardat de l'informe a la base de dades
+     */
+    async handleSaveReport() {
+        try {
+            const reportData = await this._collectReportDataAsync();
+            if (!reportData) return; // La validació ha fallat
+
+            const isAuthenticated = this.stateManager.get('user.isAuthenticated');
+            if (!isAuthenticated) return;
+
+            const isEditing = this.stateManager.get('currentReport.isEditing');
+            const currentReport = this.stateManager.get('currentReport');
+            
+            this.loadingModalManager.show("Guardant informe...");
+
+            if (isEditing) {
+                await this.updateReportInDatabase(currentReport.id, reportData);
+                this.notificationManager.success('Informe actualitzat correctament!');
+            } else {
+                // Eliminar el camp 'dia' si existeix abans d'enviar al servidor
+                if (reportData && reportData.general && reportData.general.hasOwnProperty('dia')) {
+                    delete reportData.general.dia;
+                }
+                const dataForServer = {
+                    title: `Informe Fotogràfic - ${new Date().toLocaleDateString('ca-ES')}`,
+                    report_data: reportData
+                };
+                
+                const result = await authService.createReport(dataForServer);
+                this.notificationManager.success('Informe creat correctament!');
+                
+                // Disparar esdeveniment per actualitzar l'estat de l'informe
+                const event = new CustomEvent('reportCreated', {
+                    detail: {
+                        reportId: result.report.id,
+                        reportData: result.report
+                    }
+                });
+                document.dispatchEvent(event);
             }
+        } catch (error) {
+            if (error.message && error.message.includes('validació')) {
+                this.notificationManager.warning(error.message);
+            } else {
+                this.notificationManager.error("Error en guardar l'informe");
+            }
+            ErrorBoundary.handleError(error, {}, 'save-report');
+        } finally {
+            this.loadingModalManager.hide();
+        }
     }
 
     /**
@@ -858,29 +908,27 @@ export class ReportManager {
      * Actualitzar text del botó de generar
      */
     updateGenerateButtonText() {
-        if (!this.elements.generatePdfBtn) return;
+        if (!this.elements.saveReportBtn) return;
         
         const token = localStorage.getItem('accessToken');
         const isAuthenticated = !!token;
         const currentReport = this.stateManager.get('currentReport');
         const isEditing = currentReport && currentReport.id;
         
-        let buttonText = '';
+        let buttonText = 'Guardar';
         
         if (isAuthenticated) {
             if (isEditing) {
-                buttonText = 'Actualitzar i descarregar';
+                buttonText = 'Actualitzar';
             } else {
-                buttonText = 'Guardar i descarregar';
+                buttonText = 'Guardar';
             }
-        } else {
-            buttonText = 'Descarregar';
         }
         
-        this.elements.generatePdfBtn.textContent = buttonText;
+        this.elements.saveReportBtn.textContent = buttonText;
 
-        if(this.elements.mobileGeneratePdfBtn) {
-            this.elements.mobileGeneratePdfBtn.textContent = buttonText;
+        if(this.elements.mobileSaveReportBtn) {
+            this.elements.mobileSaveReportBtn.innerHTML = `<i class="fas fa-save"></i> ${buttonText}`;
         }
     }
 

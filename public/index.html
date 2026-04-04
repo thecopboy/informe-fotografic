@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <title>Informe Fotogràfic</title>
 </head>
+
 <body>
     <header>
         <div class="title-container">
@@ -19,27 +21,28 @@
                     <span class="hamburger-line"></span>
                 </button>
             </div>
-            
+
             <h1 class="main-title">
                 <span class="title-desktop">Informe Fotogràfic</span>
                 <span class="title-mobile">Inf. Fotogràfic</span>
             </h1>
-            
+
             <!-- Espai buit per equilibrar el layout -->
             <div class="title-spacer"></div>
         </div>
-        
+
         <!-- Menú de navegació original (desktop) -->
         <nav class="header-nav" id="header-nav">
             <span id="nav-indicator-left" class="nav-indicator nav-indicator-left">‹</span>
-                            <button id="new-report-btn" class="nav-btn">Nou</button>
+            <button id="new-report-btn" class="nav-btn">Nou</button>
             <button id="load-json-btn" class="nav-btn">Importar</button>
             <button id="save-json-btn" class="nav-btn dropdown-btn">
                 <i class="fas fa-file-download"></i>
                 <span class="btn-text">Exportar</span>
                 <i class="fas fa-chevron-down dropdown-icon"></i>
             </button>
-            <button id="generate-pdf-btn" class="nav-btn">Descarregar</button>
+            <button id="save-report-btn" class="nav-btn" style="display: none;">Guardar</button>
+            <button id="generate-pdf-btn" class="nav-btn">PDF</button>
             <button id="my-reports-btn" class="nav-btn" style="display: none;">Informes</button>
             <button id="login-btn" class="nav-btn">Iniciar sessió</button>
             <div class="user-info" id="user-info" style="display: none;">
@@ -51,24 +54,30 @@
             </button>
             <span id="nav-indicator-right" class="nav-indicator nav-indicator-right">›</span>
         </nav>
-        
+
         <!-- Menú desplegable per a mòbils -->
         <nav class="mobile-nav" id="mobile-nav">
             <div class="mobile-nav-content">
                 <div class="mobile-nav-top">
-                    <button id="mobile-new-report-btn" class="nav-btn"><i class="fas fa-file-alt"></i> Nou informe</button>
+                    <button id="mobile-new-report-btn" class="nav-btn"><i class="fas fa-file-alt"></i> Nou
+                        informe</button>
                     <button id="mobile-load-json-btn" class="nav-btn"><i class="fas fa-upload"></i> Importar</button>
-                    <button id="mobile-save-json-btn" class="nav-btn"><i class="fas fa-file-download"></i> Exportar</button>
-                    <button id="mobile-generate-pdf-btn" class="nav-btn"><i class="fas fa-file-pdf"></i> Descarregar</button>
+                    <button id="mobile-save-json-btn" class="nav-btn"><i class="fas fa-file-download"></i>
+                        Exportar</button>
+                    <button id="mobile-save-report-btn" class="nav-btn" style="display: none;"><i
+                            class="fas fa-save"></i> Guardar</button>
+                    <button id="mobile-generate-pdf-btn" class="nav-btn"><i class="fas fa-file-pdf"></i>PDF</button>
                 </div>
                 <hr class="mobile-nav-divider">
                 <div class="mobile-nav-bottom">
                     <div class="mobile-user-info" id="mobile-user-info">
-                        <button id="mobile-my-reports-btn" class="nav-btn"><i class="fas fa-folder-open"></i> Informes</button>
+                        <button id="mobile-my-reports-btn" class="nav-btn"><i class="fas fa-folder-open"></i>
+                            Informes</button>
                         <button id="mobile-user-name" class="user-name"></button>
                         <button id="mobile-logout-btn" class="mobile-logout-btn">Tancar Sessió</button>
                     </div>
-                    <button id="mobile-login-btn" class="nav-btn"><i class="fas fa-sign-in-alt"></i> Iniciar sessió</button>
+                    <button id="mobile-login-btn" class="nav-btn"><i class="fas fa-sign-in-alt"></i> Iniciar
+                        sessió</button>
                     <button id="mobile-instruccions-btn" class="nav-btn mobile-instruccions-btn">
                         Instruccions / Legal
                     </button>
@@ -79,63 +88,55 @@
     <main>
         <section id="upload-section">
             <form id="main-form">
-            <div id="report-info-section">
-                <!-- Nova estructura de grid per a imatges i camps de l'informe -->
-                <div id="main-report-grid">
-                    <div id="left-image-column">
-                    <image-upload 
-                        title="Escut" 
-                        placeholder="Fes clic o arrossega l'escut" 
-                        accept-types="image/jpeg,image/png" 
-                        max-size="5242880"
-                        id="shield-upload">
-                    </image-upload>
-                    
-                    <image-upload 
-                        title="Imatge de fons" 
-                        placeholder="Fes clic o arrossega la imatge de fons" 
-                        accept-types="image/jpeg,image/png" 
-                        max-size="5242880"
-                        id="background-upload">
-                    </image-upload>
-                </div>
-                <div id="report-fields-grid">
-                        <div class="form-field">
-                            <label for="tipus">Tipus d'expedient:</label>
-                            <input type="text" id="tipus" name="tipus" required autocomplete="off">
+                <div id="report-info-section">
+                    <!-- Nova estructura de grid per a imatges i camps de l'informe -->
+                    <div id="main-report-grid">
+                        <div id="left-image-column">
+                            <image-upload title="Escut" placeholder="Fes clic o arrossega l'escut"
+                                accept-types="image/jpeg,image/png" max-size="5242880" id="shield-upload">
+                            </image-upload>
+
+                            <image-upload title="Imatge de fons" placeholder="Fes clic o arrossega la imatge de fons"
+                                accept-types="image/jpeg,image/png" max-size="5242880" id="background-upload">
+                            </image-upload>
                         </div>
-                        <div class="form-field">
-                            <label for="numero">Número d'expedient:</label>
-                            <input type="text" id="numero" name="numero" required autocomplete="off">
-                        </div>
-                        <div class="form-field-container">
+                        <div id="report-fields-grid">
                             <div class="form-field">
-                                <label for="data">Dia:</label>
-                                <input type="date" id="data" name="data" required>
+                                <label for="tipus">Tipus d'expedient:</label>
+                                <input type="text" id="tipus" name="tipus" required autocomplete="off">
                             </div>
                             <div class="form-field">
-                                <label for="hora">Hora:</label>
-                                <input type="time" id="hora" name="hora" required>
-                        </div>
-                    </div>
-                    <!-- Grup per a Adreça, Assumpte i Signants -->
-                    <div class="form-field-group">
-                        <div class="form-field" id="adreca-field">
-                            <label for="adreca">Adreça:</label>
-                            <input type="text" id="adreca" name="adreca" required autocomplete="off">
-                        </div>
-                        <div class="form-field" id="assumpte-field">
-                            <label for="assumpte">Assumpte:</label>
-                            <input type="text" id="assumpte" name="assumpte" required autocomplete="off">
-                        </div>
-                        <div class="form-field" id="signants-field">
-                            <label for="signants">Signants:</label>
-                            <input type="text" id="signants" name="signants" required autocomplete="off">
+                                <label for="numero">Número d'expedient:</label>
+                                <input type="text" id="numero" name="numero" required autocomplete="off">
+                            </div>
+                            <div class="form-field-container">
+                                <div class="form-field">
+                                    <label for="data">Dia:</label>
+                                    <input type="date" id="data" name="data" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="hora">Hora:</label>
+                                    <input type="time" id="hora" name="hora" required>
+                                </div>
+                            </div>
+                            <!-- Grup per a Adreça, Assumpte i Signants -->
+                            <div class="form-field-group">
+                                <div class="form-field" id="adreca-field">
+                                    <label for="adreca">Adreça:</label>
+                                    <input type="text" id="adreca" name="adreca" required autocomplete="off">
+                                </div>
+                                <div class="form-field" id="assumpte-field">
+                                    <label for="assumpte">Assumpte:</label>
+                                    <input type="text" id="assumpte" name="assumpte" required autocomplete="off">
+                                </div>
+                                <div class="form-field" id="signants-field">
+                                    <label for="signants">Signants:</label>
+                                    <input type="text" id="signants" name="signants" required autocomplete="off">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </form>
             <div id="drop-zone">
                 <p>Fes clic o arrossega les fotografies aquí</p>
@@ -220,9 +221,10 @@
             <div class="modal-body">
                 <h3>Instruccions d'ús</h3>
                 <ul>
-                    <li>Utilitza el menú per crear, editar i descarregar informes fotogràfics.</li>
+                    <li>Utilitza el menú superior per accions globals com Exportar, Guardar/Actualitzar l'informe i descarregar en format PDF. Els usuaris registrats disposen de l'opció per emmagatzemar la feina a la Base de Dades.</li>
                     <li>Pots arrossegar imatges o fer clic per pujar-les.</li>
-                    <li>La posició de les imatges és intercanviable entre elles arrossegant-les l'una sobre l'altra.</li>
+                    <li>La posició de les imatges és intercanviable entre elles arrossegant-les l'una sobre l'altra.
+                    </li>
                     <li>Les imatges es poden girar en intervals de 90º.</li>
                     <li>Botó d'activació de les imatges, per mantenir-les a l'informe sense esborrar-les.</li>
                     <li>Recorda desar l'informe abans de tancar la sessió o la pestanya.</li>
@@ -230,20 +232,27 @@
                 </ul>
                 <h3>Consell avançat:</h3>
                 <ul>
-                    <li>Per esborrar tots els títuls de les fotos d'un cop prem la tecla <kbd>Ctrl</kbd> mentre esborres el títol d’una foto.</li>
+                    <li>Per esborrar tots els títuls de les fotos d'un cop prem la tecla <kbd>Ctrl</kbd> mentre esborres
+                        el títol d’una foto.</li>
                 </ul>
-                
+
                 <h3>Consideracions legals</h3>
                 <ul>
                     <li>Aquest programari és d'ús intern i restringit a personal autoritzat.</li>
                     <li>Les dades introduïdes són confidencials i subjectes a la normativa de protecció de dades.</li>
                     <li>Està prohibit compartir credencials d'accés o informació sensible amb tercers.</li>
                     <li>L'ús indegut pot comportar responsabilitats disciplinàries o legals.</li>
-                    <li><strong>Propietat de les imatges:</strong> Les fotografies introduïdes en el sistema mantenen la seva propietat original. L'usuari conserva tots els drets sobre les imatges i assumeix la responsabilitat total del seu contingut i del compliment de la normativa vigent (protecció de dades, drets d'imatge, etc.).</li>
+                    <li><strong>Propietat de les imatges:</strong> Les fotografies introduïdes en el sistema mantenen la
+                        seva propietat original. L'usuari conserva tots els drets sobre les imatges i assumeix la
+                        responsabilitat total del seu contingut i del compliment de la normativa vigent (protecció de
+                        dades, drets d'imatge, etc.).</li>
                 </ul>
-                
-                <div style="margin-top: 2em; font-size: 0.95em; color: #555; border-top: 1px solid #ddd; padding-top: 1em;">
-                    &copy; <a href="mailto:themacboy72@gmail.com" style="color: #00539C; text-decoration: none; font-weight: 500;">themacboy72@gmail.com</a>. Tots els drets reservats.<br>
+
+                <div
+                    style="margin-top: 2em; font-size: 0.95em; color: #555; border-top: 1px solid #ddd; padding-top: 1em;">
+                    &copy; <a href="mailto:themacboy72@gmail.com"
+                        style="color: #00539C; text-decoration: none; font-weight: 500;">themacboy72@gmail.com</a>. Tots
+                    els drets reservats.<br>
                     Aquesta aplicació pot registrar l'activitat per motius de seguretat i auditoria.
                 </div>
             </div>
@@ -269,34 +278,23 @@
                     </div>
                     <div class="form-group">
                         <label for="profile-signants">Signant per defecte:</label>
-                        <input type="text" id="profile-signants" name="signants" placeholder="Ex: A-082" required autocomplete="off">
+                        <input type="text" id="profile-signants" name="signants" placeholder="Ex: A-082" required
+                            autocomplete="off">
                     </div>
                     <div class="profile-images-container">
                         <div class="form-group">
-                            <image-upload 
-                                title="Escut per defecte" 
-                                placeholder="Fes clic o arrossega l'escut" 
-                                accept-types="image/jpeg,image/png" 
-                                max-size="5242880"
-                                id="profile-shield-upload">
-                            </image-upload>
-                    </div>
-                    <div class="form-group">
-                            <image-upload 
-                                title="Imatge de fons" 
-                                placeholder="Fes clic o arrossega la imatge de fons" 
-                                accept-types="image/jpeg,image/png" 
-                                max-size="5242880"
-                                id="profile-background-upload">
+                            <image-upload title="Escut per defecte" placeholder="Fes clic o arrossega l'escut"
+                                accept-types="image/jpeg,image/png" max-size="5242880" id="profile-shield-upload">
                             </image-upload>
                         </div>
                         <div class="form-group">
-                            <image-upload 
-                                title="Signatura" 
-                                placeholder="Fes clic o arrossega la teva signatura" 
-                                accept-types="image/jpeg,image/png" 
-                                max-size="5242880"
-                                id="profile-signature-upload"
+                            <image-upload title="Imatge de fons" placeholder="Fes clic o arrossega la imatge de fons"
+                                accept-types="image/jpeg,image/png" max-size="5242880" id="profile-background-upload">
+                            </image-upload>
+                        </div>
+                        <div class="form-group">
+                            <image-upload title="Signatura" placeholder="Fes clic o arrossega la teva signatura"
+                                accept-types="image/jpeg,image/png" max-size="5242880" id="profile-signature-upload"
                                 show-active-toggle="true">
                             </image-upload>
                         </div>
@@ -317,7 +315,8 @@
                     </div>
                     <div class="form-group">
                         <label for="profile-confirm-password">Confirmar la nova contrasenya:</label>
-                        <input type="password" id="profile-confirm-password" name="confirmPassword" autocomplete="new-password">
+                        <input type="password" id="profile-confirm-password" name="confirmPassword"
+                            autocomplete="new-password">
                     </div>
                     <div id="profile-error" class="error-message" style="display: none;"></div>
                     <div id="profile-success" class="success-message" style="display: none;"></div>
@@ -375,7 +374,8 @@
                     </div>
                     <div class="form-group">
                         <label for="register-confirm-password">Confirmar contrasenya:</label>
-                        <input type="password" id="register-confirm-password" name="confirmPassword" required autocomplete="off">
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required
+                            autocomplete="off">
                     </div>
                     <div id="register-error" class="error-message" style="display: none;"></div>
                     <div class="form-actions">
@@ -394,7 +394,7 @@
     <!-- Scripts propis de l'aplicació -->
     <script type="module">
         import app from './js/app.js';
-        
+
         // Inicialitzar l'aplicació quan el DOM estigui carregat
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => app.init());
@@ -416,4 +416,5 @@
     </div>
 
 </body>
+
 </html>

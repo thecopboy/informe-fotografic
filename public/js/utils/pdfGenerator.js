@@ -471,66 +471,8 @@ class PhotographicReportGenerator {
  * Funció exportada que crea i genera el document PDF.
  * Aquesta és l'única funció que necessites cridar des de fora.
  * @param {object} reportData - L'objecte amb les dades recollides del formulari.
- * @param {boolean} saveToDatabase - Si es vol guardar a la base de dades (requereix autenticació)
  */
-export async function generateClientPdf(reportData, saveToDatabase = false) {
-    // Guardar l'informe a la base de dades si està autenticat i es demana
-    if (saveToDatabase) {
-        try {
-            const token = localStorage.getItem('accessToken');
-            if (token) {
-                // Eliminar el camp 'dia' si existeix abans d'enviar al servidor
-                if (reportData && reportData.general && reportData.general.hasOwnProperty('dia')) {
-                    delete reportData.general.dia;
-                }
-
-                const response = await fetch('/api/reports', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        title: `Informe Fotogràfic - ${new Date().toLocaleDateString('ca-ES')}`,
-                        report_data: reportData
-                    })
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    Logger.info('Informe guardat amb ID:', result.report.id);
-                    
-                    // Disparar esdeveniment per actualitzar l'estat del informe
-                    const event = new CustomEvent('reportCreated', {
-                        detail: {
-                            reportId: result.report.id,
-                            reportData: result.report
-                        }
-                    });
-                    document.dispatchEvent(event);
-                } else {
-                    const errorData = await response.json().catch(() => ({}));
-                    const errorMessage = errorData.error || 'Error desconegut';
-                    Logger.warn('No s\'ha pogut guardar l\'informe a la base de dades:', errorMessage);
-                    
-                    // Mostrar notificació d'error específica
-                    if (response.status === 401) {
-                        Logger.error('Error d\'autenticació en crear informe');
-                    } else if (response.status === 400) {
-                        Logger.error('Error en les dades enviades:', errorMessage);
-                    } else {
-                        Logger.error('Error del servidor en crear informe:', errorMessage);
-                    }
-                }
-            } else {
-                Logger.warn('No hi ha token d\'autenticació per guardar l\'informe');
-            }
-        } catch (error) {
-            Logger.error('Error en guardar l\'informe:', error);
-            // Continuar amb la generació del PDF encara que falli el guardat
-        }
-    }
-
+export async function generateClientPdf(reportData) {
     // Generar el PDF
     const generator = new PhotographicReportGenerator(reportData);
     generator.generate();

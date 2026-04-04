@@ -111,6 +111,8 @@ export class UIManager {
             // Altres
             generatePdfBtn: document.getElementById('generate-pdf-btn'),
             mobileGeneratePdfBtn: document.getElementById('mobile-generate-pdf-btn'),
+            saveReportBtn: document.getElementById('save-report-btn'),
+            mobileSaveReportBtn: document.getElementById('mobile-save-report-btn'),
             
             // Elements de la modal d'instruccions
             instruccionsBtn: document.getElementById('instruccions-btn'),
@@ -391,6 +393,8 @@ export class UIManager {
         // Altres
         this.elements.generatePdfBtn = document.getElementById('generate-pdf-btn');
         this.elements.mobileGeneratePdfBtn = document.getElementById('mobile-generate-pdf-btn');
+        this.elements.saveReportBtn = document.getElementById('save-report-btn');
+        this.elements.mobileSaveReportBtn = document.getElementById('mobile-save-report-btn');
         
         // Elements de la modal d'instruccions
         this.elements.instruccionsBtn = document.getElementById('instruccions-btn');
@@ -815,22 +819,21 @@ export class UIManager {
         const reportData = this.stateManager.get('currentReport.data');
         const isAuthenticated = user && user.isAuthenticated;
             
-        let text = 'Descarregar'; // Text per defecte
+        let text = 'Guardar'; // Text per defecte
         if (isAuthenticated) {
             if (reportData && reportData.id) {
-                text = 'Actualitzar i descarregar';
+                text = 'Actualitzar';
             } else {
-                text = 'Guardar i descarregar';
+                text = 'Guardar';
             }
         }
 
-        // Actualitzar botons
-        if (this.elements.generatePdfBtn) {
-            this.elements.generatePdfBtn.textContent = text;
+        // Actualitzar botons de guardar
+        if (this.elements.saveReportBtn) {
+            this.elements.saveReportBtn.textContent = text;
         }
-        if (this.elements.mobileGeneratePdfBtn) {
-            // Mantenir la icona per al botó mòbil
-            this.elements.mobileGeneratePdfBtn.innerHTML = `<i class="fas fa-file-pdf"></i> ${text}`;
+        if (this.elements.mobileSaveReportBtn) {
+            this.elements.mobileSaveReportBtn.innerHTML = `<i class="fas fa-save"></i> ${text}`;
         }
     }
 
@@ -885,9 +888,15 @@ export class UIManager {
                 this.elements.mobileUserName.textContent = mobileDisplayName;
             }
             
-            // Mostrar/amagar botons "Els meus informes"
+            // Mostrar/amagar botons "Els meus informes" i "Guardar"
             if (this.elements.myReportsBtn) {
                 this.elements.myReportsBtn.style.display = isAuthenticated ? 'block' : 'none';
+            }
+            if (this.elements.saveReportBtn) {
+                this.elements.saveReportBtn.style.display = isAuthenticated ? 'block' : 'none';
+            }
+            if (this.elements.mobileSaveReportBtn) {
+                this.elements.mobileSaveReportBtn.style.display = isAuthenticated ? 'block' : 'none';
             }
             
         } catch (error) {
