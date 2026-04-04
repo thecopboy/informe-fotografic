@@ -487,6 +487,39 @@ export class AuthService {
             throw error;
         }
     }
+
+    /**
+     * Crear nou informe
+     * @param {object} reportData - Dades de l'informe
+     * @returns {Promise<object>} - Resposta del servidor
+     */
+    async createReport(reportData) {
+        if (!this.accessToken) {
+            throw new Error('No hi ha token d\'accés');
+        }
+        
+        try {
+            const response = await fetch(`/api/reports`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reportData)
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Error creant informe: ${errorText}`);
+            }
+            
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            Logger.error('Error creant informe:', error);
+            throw error;
+        }
+    }
 }
 
 // Crear instància singleton

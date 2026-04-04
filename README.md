@@ -73,7 +73,7 @@ Aquest projecte inclou un fitxer [NOTICE](NOTICE) que documenta les contribucion
 - **Navegació intuïtiva** amb menú mòbil optimitzat
 - **Menú mòbil millorat** - Espaiat equilibrat amb línia divisòria semàntica
 - **Botons contextuals** - "Informes" només visible per usuaris autenticats
-- **Terminologia actualitzada** - "Descarregar informe" en lloc de "Crear informe"
+- **Separació botons Guardar i PDF** - Funcionalitats completament separades. Guardar persistirà les dades a la Base de Dades i el botó PDF s'encarregarà d'exportar el render.
 - **Modals moderns** per login, perfils, informes
 - **Notificacions** en temps real
 - **Indicadors visuals** per drag & drop
