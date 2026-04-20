@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,7 @@
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.1) 0px, transparent 50%);
             color: var(--text);
@@ -52,8 +53,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .icon-box {
@@ -131,11 +139,17 @@
         }
 
         @keyframes move {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100px, 100px); }
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="blobs">
         <div class="blob" style="top: 10%; left: 10%;"></div>
@@ -144,16 +158,23 @@
 
     <div class="container">
         <div class="icon-box">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
         </div>
         <h1>Projecte Traslladat</h1>
         <p>
-            La pàgina ha canviat de projecte i el nou projecte es troba dins una nova plataforma de gestió documental a <strong>Gestact.cat</strong>.
+            La pàgina ha canviat de projecte, el qual es troba dins una nova plataforma de gestió documental a
+            <strong>Gestact.cat</strong>.
         </p>
         <a href="https://gestact.cat" class="btn">Anar a Gestact.cat</a>
         <div class="footer">
-            &copy; 2025 Gestact - Sistema d'Informes Fotogràfics
+            &copy; 2025 Gestact - Sistema de gestió documental i d'informes fotogràfics
         </div>
     </div>
 </body>
+
 </html>
