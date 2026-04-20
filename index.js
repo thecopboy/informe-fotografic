@@ -102,6 +102,33 @@ if (config.server.environment === 'development') {
 // Middleware de logging
 app.use(requestLogger);
 
+// --- CONFIGURACIÓ DE TANCAMENT/MIGRACIÓ ---
+// Aquest projecte s'ha migrat a Gestact.cat. 
+// Canviar 'isProjectActive' a true per reactivar els endpoints originals.
+const isProjectActive = false; 
+
+if (!isProjectActive) {
+    app.use((req, res, next) => {
+        // Permetem l'accés a la pàgina d'arxiu i els seus recursos si n'hi hagués
+        if (req.path === '/archived.html') {
+            return next();
+        }
+
+        // Per a peticions API, retornem un error 410 (Gone)
+        if (req.path.startsWith('/api') || req.path === '/save-json') {
+            return res.status(410).json({
+                success: false,
+                message: "Aquest projecte s'ha traslladat a una nova plataforma.",
+                new_url: "https://gestact.cat"
+            });
+        }
+
+        // Per a la resta de rutes, servim la pàgina d'informació de trasllat
+        res.sendFile(path.join(__dirname, 'public', 'archived.html'));
+    });
+}
+// ------------------------------------------
+
 // Servim els fitxers estàtics de la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
